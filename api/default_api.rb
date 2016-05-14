@@ -191,12 +191,11 @@ HomeQuest.add_route('GET', '/v1/task', {
   @client[:task].find.each do |document|
     @task << document
   end
+  #TODO: return is_accept based on users
   @task.to_json 
-
-  {"message" => "yes, it worked"}.to_json
 end
 
-
+# データベースに入れたうえで, 格納した時と同じ挙動
 HomeQuest.add_route('POST', '/v1/task', {
   "resourcePath" => "/Default",
   "summary" => "Create Task",
