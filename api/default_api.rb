@@ -1,4 +1,5 @@
 require 'json'
+require 'securerandom'
 
 
 HomeQuest.add_route('DELETE', '/v1/child/{child_uuid}', {
@@ -233,8 +234,11 @@ HomeQuest.add_route('POST', '/v1/task', {
     ]}) do
   cross_origin
   # the guts live here
+  @task = JSON.parse request.body.read
+  @task.store(:uuid, SecureRandom.uuid)
+  @client[:task].insert_one(@task)
+  @task.to_json
 
-  {"message" => "yes, it worked"}.to_json
 end
 
 
