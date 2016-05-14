@@ -248,7 +248,7 @@ HomeQuest.add_route('DELETE', '/v1/task/{task_uuid}', {
     ]}) do
   cross_origin
   # the guts live here
-    @client[:tasks].find(:uuid => params[:uuid]).delete_one
+    @client[:task].find(:uuid => params[:task_uuid]).delete_one
     return nil
 
   {"message" => "yes, it worked"}.to_json
