@@ -319,7 +319,11 @@ definitions:
     - "is_accept"
     - "point"
     - "title"
+    - "uuid"
     properties:
+      uuid:
+        type: "string"
+        description: "UUID of Task"
       title:
         type: "string"
         description: "Quest name"
@@ -410,7 +414,11 @@ definitions:
     - "family_name"
     - "given_name"
     - "login_token"
+    - "uuid"
     properties:
+      uuid:
+        type: "string"
+        description: "UUID of Child"
       given_name:
         type: "string"
         description: "Given name"
