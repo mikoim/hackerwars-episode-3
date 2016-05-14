@@ -1,4 +1,4 @@
-#rapper {
+#wrapper {
   text-align:center;
 
 }
@@ -6,33 +6,13 @@
 #logo {
 	img {
 		width: 80%;
-		margin: 40% auto 0 auto;
 	}
 }
 
-.container {
-	form {
-		padding: 50;
-	}
+.logo-division {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-content: center;
+    height: 100vh;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
