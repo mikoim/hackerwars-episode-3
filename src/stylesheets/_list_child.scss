@@ -1,0 +1,23 @@
+.quest-title {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.panel-footer-info{
+    @extend .panel-footer;
+    background: $state-info-bg;
+}
+
+.panel-footer-success{
+    @extend .panel-footer;
+    background: $state-success-bg;
+}
+
+.quest-detail {
+    background: white;
+    border: none;
+}
+
+.point {
+    color: white;
+}
