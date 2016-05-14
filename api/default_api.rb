@@ -1,7 +1,6 @@
 require 'json'
 require 'securerandom'
 
-
 @@homequest_tokens = Hash.new
 
 HomeQuest.add_route('DELETE', '/v1/child/{child_uuid}', {
@@ -47,7 +46,7 @@ HomeQuest.add_route('GET', '/v1/child', {
   cross_origin
   # the guts live here
   parent_uuid = @@homequest_tokens[headers['homequest-token']]
-  @channel[:parent].find_one(parent_uuid)[children] if parent_uuid
+  @client[:parent].find_one(parent_uuid)[children] if parent_uuid
 end
 
 
@@ -75,7 +74,7 @@ HomeQuest.add_route('POST', '/v1/child', {
   # the guts live here
   parent_uuid = @@homequest_tokens[headers['homequest_token']] if @@homequest_tokens[headers['homequest_token']]
   uuid = SecureRandom.uuid
-  family_name = @channel[:parent]
+  family_name = @client[:parent]
       .find_one(:uuid => parent_uuid)[:family_name] if parent_uuid
 
   @child = {given_name: JSON.parse(request.body.read)[:given_name],
@@ -84,7 +83,7 @@ HomeQuest.add_route('POST', '/v1/child', {
             family_name: family_name} 
   @child.store(:login_id, SecureRandom.hex)
   #store @child in datebase
-  matches = @channel[:parent].find(:uuid => parent_uuid)
+  matches = @client[:parent].find(:uuid => parent_uuid)
   @parent = matches.limit(1)[:children] << @child
   matches.find_one_and_replace(@parent)
   @child.delete(:parent_uuid)
@@ -116,8 +115,7 @@ HomeQuest.add_route('POST', '/v1/signin', {
   "summary" => "Login",
   "nickname" => "signin_post",
   "responseClass" => "Signin",
-  "endpoint" => "/signin",
-  "notes" => "",
+  "endpoint" => "/signin", "notes" => "",
   "parameters" => [
     {
       "name" => "body",
@@ -129,15 +127,21 @@ HomeQuest.add_route('POST', '/v1/signin', {
   cross_origin
   # the guts live here
   @signin = JSON.parse request.body.read
-  if login_token = @signin[:login_token] then
+  if login_token = @signin["login_token"] then
     @child = @client[:child].find_one(:login_token => login_token)
     @@homequest_tokens.store(SecureRandom.hex => @child[:uuid])
     return {:homequest_token => @@homequest_tokens[@child[:uuid]]}
-  elsif email = @signin[:email] then
-    if (@parent = @channel[:parent].fine_one(:email => email)[:password]) == @signin[:password] then
-      @@homequest_tokens.store(SecureRandom.hex => @parent[:uuid])
-      return {:homequest_token => @@homequest_tokens[@parent[:uuid]]}
+  elsif @signin["email"] then
+    @client[:parent].find(:email => @signin["email"]).limit(1).each do |doc|
+      @parent = doc
     end
+    if @parent[:password] == @signin["password"] then
+      homequest_token = SecureRandom.hex
+      @@homequest_tokens.store(homequest_token, @parent[:uuid])
+      return {:homequest_token => homequest_token}.to_json
+    end
+  else
+    puts 'epic fail'
   end
 end
 
@@ -166,6 +170,7 @@ HomeQuest.add_route('POST', '/v1/signup', {
   # the guts live here
 
   @parent = JSON.parse request.body.read
+  puts @parent
   @parent.store(:children, Array.new)
   @parent.store(:uuid, SecureRandom.uuid)
   @client[:parent].insert_one(@parent)
