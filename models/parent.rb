@@ -1,0 +1,2 @@
+class Parent < User
+end

@@ -1,0 +1,437 @@
+---
+swagger: "2.0"
+info:
+  description: "ToDo App for Kids"
+  version: "0.0.2"
+  title: "Home Quest"
+  license:
+    name: "MIT"
+basePath: "/v1"
+schemes:
+- "http"
+produces:
+- "application/json"
+paths:
+  /child:
+    get:
+      summary: "Get array of Child"
+      parameters: []
+      responses:
+        200:
+          description: "Array of Child"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Child"
+        default:
+          description: "Standard error"
+          schema:
+            $ref: "#/definitions/Error"
+      security:
+      - api_key: []
+    post:
+      summary: "Create Child"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/newChild"
+      responses:
+        200:
+          description: "newChild object"
+          schema:
+            $ref: "#/definitions/Child"
+        default:
+          description: "Standard error"
+          schema:
+            $ref: "#/definitions/Error"
+      security:
+      - api_key: []
+  /child/{child_uuid}:
+    delete:
+      summary: "Delete Child"
+      parameters:
+      - name: "child_uuid"
+        in: "path"
+        description: "UUID of Child"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Child deleted"
+        default:
+          description: "Standard error"
+          schema:
+            $ref: "#/definitions/Error"
+      security:
+      - api_key: []
+  /notification:
+    get:
+      summary: "Get array of Notification"
+      parameters: []
+      responses:
+        200:
+          description: "Array of Notification"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Notification"
+        default:
+          description: "Standard error"
+          schema:
+            $ref: "#/definitions/Error"
+      security:
+      - api_key: []
+  /signin:
+    post:
+      summary: "Login"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/newSignin"
+      responses:
+        200:
+          description: "Signin object"
+          schema:
+            $ref: "#/definitions/Signin"
+        default:
+          description: "Standard error"
+          schema:
+            $ref: "#/definitions/Error"
+  /signup:
+    post:
+      summary: "Register family account"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Signup object"
+        required: true
+        schema:
+          $ref: "#/definitions/Signup"
+      responses:
+        200:
+          description: "Signup succeed"
+        default:
+          description: "Standard error"
+          schema:
+            $ref: "#/definitions/Error"
+      security:
+      - api_key: []
+  /status:
+    get:
+      summary: "Get Status"
+      parameters: []
+      responses:
+        200:
+          description: "Status object"
+          schema:
+            $ref: "#/definitions/Status"
+        default:
+          description: "Standard error"
+          schema:
+            $ref: "#/definitions/Error"
+      security:
+      - api_key: []
+  /task:
+    get:
+      summary: "Get array of Task"
+      parameters: []
+      responses:
+        200:
+          description: "Array of Task object"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Task"
+        default:
+          description: "Standard error"
+          schema:
+            $ref: "#/definitions/Error"
+      security:
+      - api_key: []
+    post:
+      summary: "Create Task"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/newTask"
+      responses:
+        200:
+          description: "Task object"
+          schema:
+            $ref: "#/definitions/Task"
+        default:
+          description: "Standard error"
+          schema:
+            $ref: "#/definitions/Error"
+      security:
+      - api_key: []
+  /task/{task_uuid}:
+    get:
+      summary: "Get Task"
+      parameters:
+      - name: "task_uuid"
+        in: "path"
+        description: "UUID of Task"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Task object"
+          schema:
+            $ref: "#/definitions/Task"
+        default:
+          description: "Standard error"
+          schema:
+            $ref: "#/definitions/Error"
+      security:
+      - api_key: []
+    post:
+      summary: "Update status of Task"
+      parameters:
+      - name: "task_uuid"
+        in: "path"
+        description: "UUID of Task"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "updateTaskState object"
+        required: true
+        schema:
+          $ref: "#/definitions/updateTaskState"
+      responses:
+        200:
+          description: "Task object"
+          schema:
+            $ref: "#/definitions/Task"
+        default:
+          description: "Standard error"
+          schema:
+            $ref: "#/definitions/Error"
+      security:
+      - api_key: []
+    delete:
+      summary: "Delete Task"
+      parameters:
+      - name: "task_uuid"
+        in: "path"
+        description: "UUID of Task"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+      security:
+      - api_key: []
+securityDefinitions:
+  api_key:
+    type: "apiKey"
+    name: "homequest_token"
+    in: "header"
+definitions:
+  Status:
+    type: "object"
+    required:
+    - "family_name"
+    - "given_name"
+    - "is_admin"
+    - "point"
+    - "user_uuid"
+    properties:
+      family_name:
+        type: "string"
+        description: "Family name"
+      given_name:
+        type: "string"
+        description: "Given name"
+      point:
+        type: "integer"
+        description: "Point"
+      is_admin:
+        type: "boolean"
+        description: "Is account administrator?"
+      user_uuid:
+        type: "string"
+        description: "UUID of User"
+  Signup:
+    type: "object"
+    required:
+    - "email"
+    - "family_name"
+    - "given_name"
+    - "password"
+    properties:
+      email:
+        type: "string"
+        format: "email"
+        description: "E-mail address"
+      password:
+        type: "string"
+        description: "Password"
+      family_name:
+        type: "string"
+        description: "Family name"
+      given_name:
+        type: "string"
+        description: "Given name"
+  newTask:
+    type: "object"
+    required:
+    - "application_deadline"
+    - "completion_deadline"
+    - "description"
+    - "difficulty"
+    - "point"
+    - "title"
+    properties:
+      title:
+        type: "string"
+        description: "Quest name"
+      application_deadline:
+        type: "integer"
+        description: "Deadline of application"
+      completion_deadline:
+        type: "integer"
+        description: "Deadline of completion"
+      point:
+        type: "integer"
+        description: "Point"
+      difficulty:
+        type: "integer"
+        description: "Difficulty"
+      description:
+        type: "string"
+        description: "Description"
+  Task:
+    type: "object"
+    required:
+    - "accepted_child"
+    - "application_deadline"
+    - "completion_deadline"
+    - "description"
+    - "difficulty"
+    - "is_accept"
+    - "point"
+    - "title"
+    - "uuid"
+    properties:
+      uuid:
+        type: "string"
+        description: "UUID of Task"
+      title:
+        type: "string"
+        description: "Quest name"
+      application_deadline:
+        type: "integer"
+        description: "Deadline of application"
+      completion_deadline:
+        type: "integer"
+        description: "Deadline of completion"
+      point:
+        type: "integer"
+        description: "Point"
+      difficulty:
+        type: "integer"
+        description: "Difficulty"
+      description:
+        type: "string"
+        description: "Description"
+      is_accept:
+        type: "boolean"
+        description: "Is quest accepted?"
+      accepted_child:
+        type: "array"
+        description: "Array of Child"
+        items:
+          $ref: "#/definitions/Child"
+  updateTaskState:
+    type: "object"
+    properties:
+      is_accept:
+        type: "boolean"
+        description: "Is quest accepted?"
+      is_cancel:
+        type: "boolean"
+        description: "Is quest cancelled?"
+      is_complete:
+        type: "boolean"
+        description: "Is quest completed?"
+      is_reject:
+        type: "boolean"
+        description: "Is quest rejected?"
+      is_verified:
+        type: "boolean"
+        description: "Is quest verified?"
+  newSignin:
+    type: "object"
+    properties:
+      email:
+        type: "string"
+        description: "E-mail address"
+      password:
+        type: "string"
+        description: "Password"
+      login_token:
+        type: "string"
+        description: "Login token"
+  Signin:
+    type: "object"
+    required:
+    - "homequest_token"
+    properties:
+      homequest_token:
+        type: "string"
+        description: "Authenticated login token"
+  Notification:
+    type: "object"
+    required:
+    - "message"
+    - "timestamp"
+    properties:
+      timestamp:
+        type: "integer"
+        description: "Unix Time Stamp"
+      message:
+        type: "string"
+        description: "Notify message"
+  newChild:
+    type: "object"
+    required:
+    - "given_name"
+    properties:
+      given_name:
+        type: "string"
+        description: "Given name"
+  Child:
+    type: "object"
+    required:
+    - "family_name"
+    - "given_name"
+    - "login_token"
+    - "uuid"
+    properties:
+      uuid:
+        type: "string"
+        description: "UUID of Child"
+      given_name:
+        type: "string"
+        description: "Given name"
+      family_name:
+        type: "string"
+        description: "Family name"
+      login_token:
+        type: "string"
+        description: "Login token"
+  Error:
+    type: "object"
+    required:
+    - "message"
+    properties:
+      message:
+        type: "string"
