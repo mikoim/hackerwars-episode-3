@@ -1,0 +1,23 @@
+{
+  "name": "gulp.js-template",
+  "description": "Automate and enhance my workflow",
+  "main": "index.js",
+  "authors": [
+    "Tamrin007 (tamrin.bitterchococo@gmail.com)"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/Tamrin007/gulp.js-template",
+  "moduleType": [],
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.4",
+    "bootstrap-sass": "~3.3.6"
+  }
+}

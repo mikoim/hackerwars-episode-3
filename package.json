@@ -1,0 +1,27 @@
+{
+  "name": "gulp.js-template",
+  "version": "0.1.0",
+  "description": "Automate and enhance my workflow",
+  "main": "index.js",
+  "scripts": {
+    "build": "gulp build",
+    "start": "gulp start",
+    "bower": "bower",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Tamrin007 (tamrin.bitterchococo@gmail.com)",
+  "license": "MIT",
+  "devDependencies": {
+    "bower": "^1.7.1",
+    "del": "^2.2.0",
+    "gulp": "^3.9.0",
+    "gulp-compass": "^2.1.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-cssnano": "^2.0.0",
+    "gulp-image": "^1.3.0",
+    "gulp-plumber": "^1.0.1",
+    "gulp-watch": "^4.3.5",
+    "gulp-webserver": "^0.9.1",
+    "run-sequence": "^1.1.5"
+  }
+}
