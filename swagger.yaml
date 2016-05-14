@@ -6,7 +6,6 @@ info:
   title: "Home Quest"
   license:
     name: "MIT"
-host: "192.168.100.209"
 basePath: "/v1"
 schemes:
 - "http"

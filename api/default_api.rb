@@ -23,6 +23,7 @@ HomeQuest.add_route('DELETE', '/v1/child/{child_uuid}', {
     ]}) do
   cross_origin
   # the guts live here
+	
 
   {"message" => "yes, it worked"}.to_json
 end
@@ -198,7 +199,14 @@ HomeQuest.add_route('GET', '/v1/task', {
     ]}) do
   cross_origin
   # the guts live here
-
+  
+	@task = Array.new
+  content_type :json
+  @client[:task].find.each do |document|
+    @task << document
+  end
+  @task.to_json 
+	 
   {"message" => "yes, it worked"}.to_json
 end
 
