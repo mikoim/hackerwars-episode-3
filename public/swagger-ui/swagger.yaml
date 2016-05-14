@@ -1,0 +1,379 @@
+---
+swagger: "2.0"
+info:
+  description: "クソガキを矯正するためのToDoアプリ"
+  version: "0.0.1"
+  title: "Home Quest"
+  license:
+    name: "MIT"
+host: "localhost"
+basePath: "/v1"
+schemes:
+- "http"
+produces:
+- "application/json"
+paths:
+  /child:
+    get:
+      summary: "子供の一覧を取得"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/Child"
+      responses:
+        200:
+          description: "Child"
+          schema:
+            $ref: "#/definitions/Child"
+        default:
+          description: "エラー"
+          schema:
+            $ref: "#/definitions/Error"
+      security:
+      - api_key: []
+    post:
+      summary: "子供を人体錬成"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/Child"
+      responses:
+        200:
+          description: "child配列"
+          schema:
+            $ref: "#/definitions/Child"
+        default:
+          description: "エラー"
+          schema:
+            $ref: "#/definitions/Error"
+      security:
+      - api_key: []
+  /child/{child_uuid}:
+    delete:
+      summary: "子供を消す"
+      parameters:
+      - name: "child_uuid"
+        in: "path"
+        description: "子供ののUUID"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "child"
+          schema:
+            $ref: "#/definitions/Child"
+        default:
+          description: "エラー"
+          schema:
+            $ref: "#/definitions/Error"
+      security:
+      - api_key: []
+  /notification:
+    get:
+      summary: "通知"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/Notification"
+      responses:
+        200:
+          description: "Notification"
+          schema:
+            $ref: "#/definitions/Notification"
+        default:
+          description: "エラー"
+          schema:
+            $ref: "#/definitions/Error"
+      security:
+      - api_key: []
+  /signin:
+    post:
+      summary: "サインイン"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/Signin"
+      responses:
+        200:
+          description: "Signin"
+          schema:
+            $ref: "#/definitions/Signin"
+        default:
+          description: "エラー"
+          schema:
+            $ref: "#/definitions/Error"
+  /signup:
+    post:
+      summary: "家族アカウントを作成"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "家族アカウントの情報を表すオブジェクト"
+        required: false
+        schema:
+          $ref: "#/definitions/Signup"
+      responses:
+        200:
+          description: "家族アカウント"
+          schema:
+            $ref: "#/definitions/Signup"
+        default:
+          description: "エラー"
+          schema:
+            $ref: "#/definitions/Error"
+      security:
+      - api_key: []
+  /status:
+    get:
+      summary: "ユーザーの状態を取得"
+      parameters: []
+      responses:
+        200:
+          description: "ユーザーの状態"
+          schema:
+            $ref: "#/definitions/Status"
+        default:
+          description: "エラー"
+          schema:
+            $ref: "#/definitions/Error"
+      security:
+      - api_key: []
+  /task:
+    get:
+      summary: "タスクの一覧を取得"
+      parameters: []
+      responses:
+        200:
+          description: "タスクの配列"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Task"
+        default:
+          description: "エラー"
+          schema:
+            $ref: "#/definitions/Error"
+      security:
+      - api_key: []
+    post:
+      summary: "タスクを作成"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/Task"
+      responses:
+        200:
+          description: "タスク"
+          schema:
+            $ref: "#/definitions/Task"
+        default:
+          description: "エラー"
+          schema:
+            $ref: "#/definitions/Error"
+      security:
+      - api_key: []
+  /task/{task_uuid}:
+    get:
+      summary: "タスクを取得"
+      parameters:
+      - name: "task_uuid"
+        in: "path"
+        description: "タスクのUUID"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "タスク"
+          schema:
+            $ref: "#/definitions/Task"
+        default:
+          description: "エラー"
+          schema:
+            $ref: "#/definitions/Error"
+      security:
+      - api_key: []
+    post:
+      summary: "タスクの状態を変更"
+      parameters:
+      - name: "task_uuid"
+        in: "path"
+        description: "タスクのUUID"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "タスクの状態を表すオブジェクト"
+        required: true
+        schema:
+          $ref: "#/definitions/UpdateTaskState"
+      responses:
+        200:
+          description: "タスク"
+          schema:
+            $ref: "#/definitions/Task"
+        default:
+          description: "エラー"
+          schema:
+            $ref: "#/definitions/Error"
+      security:
+      - api_key: []
+    delete:
+      summary: "タスクを削除"
+      parameters:
+      - name: "task_uuid"
+        in: "path"
+        description: "タスクのUUID"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+      security:
+      - api_key: []
+securityDefinitions:
+  api_key:
+    type: "apiKey"
+    name: "homequest_token"
+    in: "header"
+definitions:
+  Status:
+    type: "object"
+    required:
+    - "family_name"
+    - "given_name"
+    - "is_admin"
+    - "point"
+    properties:
+      family_name:
+        type: "string"
+        description: "姓"
+      given_name:
+        type: "string"
+        description: "名"
+      point:
+        type: "integer"
+        description: "ポイント"
+      is_admin:
+        type: "boolean"
+        description: "ユーザーは管理者である"
+  Signup:
+    type: "object"
+    properties:
+      email:
+        type: "string"
+        format: "email"
+        description: "メールアドレス"
+      password:
+        type: "string"
+        description: "パスワード"
+      login_token:
+        type: "string"
+        description: "ログイントークン"
+  Task:
+    type: "object"
+    required:
+    - "application_deadline"
+    - "completion_deadline"
+    - "description"
+    - "difficulty"
+    - "point"
+    - "title"
+    properties:
+      title:
+        type: "string"
+        description: "クエスト名"
+      application_deadline:
+        type: "integer"
+        description: "応募期限（UNIX TIME, 秒）"
+      completion_deadline:
+        type: "integer"
+        description: "完了期限（UNIX TIME, 秒）"
+      point:
+        type: "integer"
+        description: "ポイント"
+      difficulty:
+        type: "integer"
+        description: "難易度"
+      description:
+        type: "string"
+        description: "詳細"
+      users:
+        type: "array"
+        description: "クエストを受けている人のリスト"
+        items:
+          type: "string"
+          description: "クエストを受けている人のUUID"
+      is_complete:
+        type: "boolean"
+        description: "クエストは完了している"
+      is_verified:
+        type: "boolean"
+        description: "完了は承諾されている"
+  UpdateTaskState:
+    type: "object"
+    properties:
+      is_accept:
+        type: "boolean"
+        description: "クエストは受注されている"
+      is_cancel:
+        type: "boolean"
+        description: "クエストはキャンセルされている"
+      is_complete:
+        type: "boolean"
+        description: "クエストは完了されている"
+      is_reject:
+        type: "boolean"
+        description: "クエストは断念されている"
+      is_verified:
+        type: "boolean"
+        description: "クエストの完了は承認されている"
+  Signin:
+    type: "object"
+    properties:
+      email:
+        type: "string"
+        description: "ユーザー名（メールアドレス）"
+      password:
+        type: "string"
+        description: "パスワード"
+      token:
+        type: "string"
+        description: "固定トークン"
+  Notification:
+    type: "object"
+    properties:
+      timestamp:
+        type: "integer"
+        description: "タイムスタンプ(UNIX TIMESTAMP)"
+      message:
+        type: "string"
+        description: "通知のメッセージ"
+  Child:
+    type: "object"
+    properties:
+      given_name:
+        type: "string"
+        description: "名"
+      family_name:
+        type: "string"
+        description: "性"
+      login_token:
+        type: "string"
+        description: "emailの確認についてるアレ"
+  Error:
+    type: "object"
+    required:
+    - "message"
+    properties:
+      message:
+        type: "string"
