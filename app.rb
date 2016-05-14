@@ -16,9 +16,16 @@ get '/v1/task' do
   @client[:tasks].find.each do |document|
     @tasks << document
   end
+  @tasks.to_json
 end
 
 post '/v1/task' do
 
+end
+
+delete '/v1/task/:uuid' do
+  @client.find(:uuid => params[:uuid]).each do |document|
+    
+  end
 end
 

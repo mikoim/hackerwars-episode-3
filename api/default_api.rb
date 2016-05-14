@@ -1,7 +1,7 @@
 require 'json'
 
 
-MyApp.add_route('DELETE', '/v1/child/{child_uuid}', {
+HomeQuest.add_route('DELETE', '/v1/child/{child_uuid}', {
   "resourcePath" => "/Default",
   "summary" => "\u5B50\u4F9B\u3092\u6D88\u3059",
   "nickname" => "child_child_uuid_delete", 
@@ -28,7 +28,7 @@ MyApp.add_route('DELETE', '/v1/child/{child_uuid}', {
 end
 
 
-MyApp.add_route('GET', '/v1/child', {
+HomeQuest.add_route('GET', '/v1/child', {
   "resourcePath" => "/Default",
   "summary" => "\u5B50\u4F9B\u306E\u4E00\u89A7\u3092\u53D6\u5F97",
   "nickname" => "child_get", 
@@ -55,7 +55,7 @@ MyApp.add_route('GET', '/v1/child', {
 end
 
 
-MyApp.add_route('POST', '/v1/child', {
+HomeQuest.add_route('POST', '/v1/child', {
   "resourcePath" => "/Default",
   "summary" => "\u5B50\u4F9B\u3092\u4EBA\u4F53\u932C\u6210",
   "nickname" => "child_post", 
@@ -82,7 +82,7 @@ MyApp.add_route('POST', '/v1/child', {
 end
 
 
-MyApp.add_route('GET', '/v1/notification', {
+HomeQuest.add_route('GET', '/v1/notification', {
   "resourcePath" => "/Default",
   "summary" => "\u901A\u77E5",
   "nickname" => "notification_get", 
@@ -109,7 +109,7 @@ MyApp.add_route('GET', '/v1/notification', {
 end
 
 
-MyApp.add_route('POST', '/v1/signin', {
+HomeQuest.add_route('POST', '/v1/signin', {
   "resourcePath" => "/Default",
   "summary" => "\u30B5\u30A4\u30F3\u30A4\u30F3",
   "nickname" => "signin_post", 
@@ -136,7 +136,7 @@ MyApp.add_route('POST', '/v1/signin', {
 end
 
 
-MyApp.add_route('POST', '/v1/signup', {
+HomeQuest.add_route('POST', '/v1/signup', {
   "resourcePath" => "/Default",
   "summary" => "\u5BB6\u65CF\u30A2\u30AB\u30A6\u30F3\u30C8\u3092\u4F5C\u6210",
   "nickname" => "signup_post", 
@@ -163,7 +163,7 @@ MyApp.add_route('POST', '/v1/signup', {
 end
 
 
-MyApp.add_route('GET', '/v1/status', {
+HomeQuest.add_route('GET', '/v1/status', {
   "resourcePath" => "/Default",
   "summary" => "\u30E6\u30FC\u30B6\u30FC\u306E\u72B6\u614B\u3092\u53D6\u5F97",
   "nickname" => "status_get", 
@@ -183,7 +183,7 @@ MyApp.add_route('GET', '/v1/status', {
 end
 
 
-MyApp.add_route('GET', '/v1/task', {
+HomeQuest.add_route('GET', '/v1/task', {
   "resourcePath" => "/Default",
   "summary" => "\u30BF\u30B9\u30AF\u306E\u4E00\u89A7\u3092\u53D6\u5F97",
   "nickname" => "task_get", 
@@ -203,7 +203,7 @@ MyApp.add_route('GET', '/v1/task', {
 end
 
 
-MyApp.add_route('POST', '/v1/task', {
+HomeQuest.add_route('POST', '/v1/task', {
   "resourcePath" => "/Default",
   "summary" => "\u30BF\u30B9\u30AF\u3092\u4F5C\u6210",
   "nickname" => "task_post", 
@@ -230,7 +230,7 @@ MyApp.add_route('POST', '/v1/task', {
 end
 
 
-MyApp.add_route('DELETE', '/v1/task/{task_uuid}', {
+HomeQuest.add_route('DELETE', '/v1/task/{task_uuid}', {
   "resourcePath" => "/Default",
   "summary" => "\u30BF\u30B9\u30AF\u3092\u524A\u9664",
   "nickname" => "task_task_uuid_delete", 
@@ -257,7 +257,7 @@ MyApp.add_route('DELETE', '/v1/task/{task_uuid}', {
 end
 
 
-MyApp.add_route('GET', '/v1/task/{task_uuid}', {
+HomeQuest.add_route('GET', '/v1/task/{task_uuid}', {
   "resourcePath" => "/Default",
   "summary" => "\u30BF\u30B9\u30AF\u3092\u53D6\u5F97",
   "nickname" => "task_task_uuid_get", 
@@ -284,7 +284,7 @@ MyApp.add_route('GET', '/v1/task/{task_uuid}', {
 end
 
 
-MyApp.add_route('POST', '/v1/task/{task_uuid}', {
+HomeQuest.add_route('POST', '/v1/task/{task_uuid}', {
   "resourcePath" => "/Default",
   "summary" => "\u30BF\u30B9\u30AF\u306E\u72B6\u614B\u3092\u5909\u66F4",
   "nickname" => "task_task_uuid_post", 
