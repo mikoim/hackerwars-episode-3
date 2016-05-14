@@ -2,6 +2,8 @@ require 'json'
 require 'securerandom'
 
 
+@@homequest_tokens = Hash.new
+
 HomeQuest.add_route('DELETE', '/v1/child/{child_uuid}', {
   "resourcePath" => "/Default",
   "summary" => "Delete Child",
@@ -104,22 +106,28 @@ HomeQuest.add_route('POST', '/v1/signin', {
   "endpoint" => "/signin",
   "notes" => "",
   "parameters" => [
-
-
-
-
     {
       "name" => "body",
       "description" => "",
       "dataType" => "NewSignin",
       "paramType" => "body",
     }
-
     ]}) do
   cross_origin
   # the guts live here
+  @signin = JSON.parse request.body.read
+  if login_token = signin[:login_token] then
+    @child = @client[:child].find_one(:login_token => login_token)
+    @@homequest_tokens.store(SecureRandom.hex => @child[:uuid])
+    return {:homequest_token => @@homequest_tokens[@child[:uuid]]}
+  else if email = signin[:email] then
+    if (@parent = @channel[:parent].fine_one(:email => email)[:password]) \
+                                                == @signin[:password] then
+      @@homequest_tokens.store(SecureRandom.hex => @parent[:uuid])
+      return {:homequest_token => @@homequest_tokens[@parent[:uuid]]}
+    end
+  end
 
-  {"message" => "yes, it worked"}.to_json
 end
 
 
