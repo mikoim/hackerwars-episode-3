@@ -369,11 +369,11 @@ definitions:
   Signin:
     type: "object"
     required:
-    - "login_token"
+    - "homequest_token"
     properties:
-      login_token:
+      homequest_token:
         type: "string"
-        description: "Login token"
+        description: "Authenticated login token"
   Notification:
     type: "object"
     required:
