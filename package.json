@@ -1,7 +1,7 @@
 {
-  "name": "gulp.js-template",
-  "version": "0.1.0",
-  "description": "Automate and enhance my workflow",
+  "name": "HomeQuest",
+  "version": "0.0.1",
+  "description": "ToDo App for Kids",
   "main": "index.js",
   "scripts": {
     "build": "gulp build",
@@ -9,12 +9,17 @@
     "bower": "bower",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Tamrin007 (tamrin.bitterchococo@gmail.com)",
+  "author": "DIT (dit.rohm@gmail.com)",
   "license": "MIT",
+  "dependencies": {
+    "superagent": "1.7.1"
+  },
   "devDependencies": {
     "bower": "^1.7.1",
     "del": "^2.2.0",
+    "expect.js": "~0.3.1",
     "gulp": "^3.9.0",
+    "gulp-browserify": "^0.5.1",
     "gulp-compass": "^2.1.0",
     "gulp-concat": "^2.6.0",
     "gulp-cssnano": "^2.0.0",
@@ -22,6 +27,10 @@
     "gulp-plumber": "^1.0.1",
     "gulp-watch": "^4.3.5",
     "gulp-webserver": "^0.9.1",
-    "run-sequence": "^1.1.5"
+    "home-quest": "file:swagger-js",
+    "mocha": "~2.3.4",
+    "run-sequence": "^1.1.5",
+    "sinon": "1.17.3",
+    "url-parse": "^1.1.1"
   }
 }

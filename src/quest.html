@@ -4,94 +4,95 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title></title>
+    <title>HomeQuest: Create Quest</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" href="./stylesheets/style.css">
+    <link rel="stylesheet" href="stylesheets/style.css">
 </head>
 
 <body>
-    <!--[if lt IE 8]>
-            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-        <![endif]-->
+<!--[if lt IE 8]>
+<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+<![endif]-->
 
-    <!-- Add your site or application content here -->
-    <nav class="navbar navbar-inverse navbar-static-top">
-        <div class="container-fluid">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="#">ロゴ</a>
-            </div>
-
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
-                    <li class="active"><a href="#">クエストリスト<span class="sr-only">(current)</span></a></li>
-                </ul>
-            </div>
-            <!-- /.navbar-collapse -->
+<!-- Add your site or application content here -->
+<nav class="navbar navbar-inverse navbar-static-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">ロゴ</a>
         </div>
-        <!-- /.container-fluid -->
-    </nav>
 
-    <div class="container">
-        <section id="quest_form">
-            <form>
-                <div class="form-group col-xs-12">
-                    <label for="quest_name">クエスト名</label>
-                    <div class="input-group">
-                        <input type="text" class="form-control" id="quest_name" name="quest_name" placeholder="クエスト名">
-                        <span class="input-group-addon" id="basic-addon2">せよ！！</span>
-                    </div>
-                </div>
-                <div class="form-group col-xs-12">
-                    <label for="reward">報酬</label>
-                    <div class="input-group">
-                        <input type="number" class="form-control" id="reward" name="reward" placeholder="達成した時の報酬ポイント">
-                        <span class="input-group-addon" id="basic-addon2">ポイント</span>
-                    </div>
-                </div>
-                <div class="form-group col-sm-4">
-                    <label for="level">むずかしさ</label>
-                    <select class="form-control" id="level" name="level">
-                        <option>★☆☆☆☆：チョ～かんたん！</option>
-                        <option>★★☆☆☆：かんたん！</option>
-                        <option>★★★☆☆：ふつう</option>
-                        <option>★★★★☆：時間がかかるかも？</option>
-                        <option>★★★★★：めっちゃムズい！</option>
-                    </select>
-                </div>
-                <div class="form-group col-sm-4">
-                    <label for="limit-for-entry">応募締め切り</label>
-                    <input type="text" class="form-control" id="limit-for-entry" name="limit-for-entry" placeholder="1999-01-01 00:00">
-                </div>
-                <div class="form-group col-sm-4">
-                    <label for="limit-for-done">応募締め切り</label>
-                    <input type="text" class="form-control" id="limit-for-done" name="limit-for-done" placeholder="1999-01-01 00:00">
-                </div>
-                <div class="form-group col-xs-12">
-                    <label for="quest_detail">クエスト詳細（任意）</label>
-                    <textarea class="form-control" id="quest_detail" rows="3"></textarea>
-                </div>
-                <div class="form-group text-center">
-                    <button type="submit" class="btn btn-primary">クエストを作成</button>
-                </div>
-            </form>
-        </section>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="#">クエストリスト<span class="sr-only">(current)</span></a></li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
     </div>
+    <!-- /.container-fluid -->
+</nav>
 
-    <script src="./javascripts/bower.js"></script>
-    <script src="./javascripts/all.js"></script>
+<div class="container">
+    <section id="quest_form">
+        <form>
+            <div class="form-group col-xs-12">
+                <label for="quest_name">クエスト名</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="quest_name" name="quest_name" placeholder="クエスト名">
+                    <span class="input-group-addon" id="basic-addon2">せよ！！</span>
+                </div>
+            </div>
+            <div class="form-group col-xs-12">
+                <label for="reward">報酬</label>
+                <div class="input-group">
+                    <input type="number" class="form-control" id="reward" name="reward" placeholder="達成した時の報酬ポイント">
+                    <span class="input-group-addon" id="basic-addon2">ポイント</span>
+                </div>
+            </div>
+            <div class="form-group col-sm-4">
+                <label for="level">むずかしさ</label>
+                <select class="form-control" id="level" name="level">
+                    <option>★☆☆☆☆：チョ～かんたん！</option>
+                    <option>★★☆☆☆：かんたん！</option>
+                    <option>★★★☆☆：ふつう</option>
+                    <option>★★★★☆：時間がかかるかも？</option>
+                    <option>★★★★★：めっちゃムズい！</option>
+                </select>
+            </div>
+            <div class="form-group col-sm-4">
+                <label for="limit-for-entry">応募締め切り</label>
+                <input type="text" class="form-control" id="limit-for-entry" name="limit-for-entry" placeholder="1999-01-01 00:00">
+            </div>
+            <div class="form-group col-sm-4">
+                <label for="limit-for-done">応募締め切り</label>
+                <input type="text" class="form-control" id="limit-for-done" name="limit-for-done" placeholder="1999-01-01 00:00">
+            </div>
+            <div class="form-group col-xs-12">
+                <label for="quest_detail">クエスト詳細（任意）</label>
+                <textarea class="form-control" id="quest_detail" rows="3"></textarea>
+            </div>
+            <div class="form-group text-center">
+                <button type="submit" class="btn btn-primary">クエストを作成</button>
+            </div>
+        </form>
+    </section>
+</div>
 
-    <script>
-    </script>
+<script src="javascripts/bower.js"></script>
+<script src="javascripts/all.js"></script>
+<script src="javascripts/swagger.js"></script>
+
+<script>
+</script>
 </body>
 
 </html>
