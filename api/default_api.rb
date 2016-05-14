@@ -160,7 +160,12 @@ HomeQuest.add_route('POST', '/v1/signup', {
   cross_origin
   # the guts live here
 
-  {"message" => "yes, it worked"}.to_json
+  parent = JSON.parse request.body.read
+  puts parent
+  @client[:parent].insert_one(parent)
+  
+  #nilで良い
+  return parent.to_json
 end
 
 
