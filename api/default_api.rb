@@ -46,8 +46,8 @@ HomeQuest.add_route('GET', '/v1/child', {
     ]}) do
   cross_origin
   # the guts live here
-
-  {"message" => "yes, it worked"}.to_json
+  parent_uuid = @@homequest_tokens[headers['homequest-token']]
+  @channel[:parent].find_one(parent_uuid)[children] if parent_uuid
 end
 
 
@@ -73,8 +73,22 @@ HomeQuest.add_route('POST', '/v1/child', {
     ]}) do
   cross_origin
   # the guts live here
+  parent_uuid = @@homequest_tokens[headers['homequest_token']] if @@homequest_tokens[headers['homequest_token']]
+  uuid = SecureRandom.uuid
+  family_name = @channel[:parent]
+      .find_one(:uuid => parent_uuid)[:family_name] if parent_uuid
 
-  {"message" => "yes, it worked"}.to_json
+  @child = {given_name: JSON.parse(request.body.read)[:given_name],
+            parent_uuid: parent_uuid,
+            uuid: uuid,
+            family_name: family_name} 
+  @child.store(:login_id, SecureRandom.hex)
+  #store @child in datebase
+  matches = @channel[:parent].find(:uuid => parent_uuid)
+  @parent = matches.limit(1)[:children] << @child
+  matches.find_one_and_replace(@parent)
+  @child.delete(:parent_uuid)
+  @child
 end
 
 
@@ -97,7 +111,6 @@ HomeQuest.add_route('GET', '/v1/notification', {
   {"message" => "yes, it worked"}.to_json
 end
 
-
 HomeQuest.add_route('POST', '/v1/signin', {
   "resourcePath" => "/Default",
   "summary" => "Login",
@@ -116,18 +129,16 @@ HomeQuest.add_route('POST', '/v1/signin', {
   cross_origin
   # the guts live here
   @signin = JSON.parse request.body.read
-  if login_token = signin[:login_token] then
+  if login_token = @signin[:login_token] then
     @child = @client[:child].find_one(:login_token => login_token)
     @@homequest_tokens.store(SecureRandom.hex => @child[:uuid])
     return {:homequest_token => @@homequest_tokens[@child[:uuid]]}
-  else if email = signin[:email] then
-    if (@parent = @channel[:parent].fine_one(:email => email)[:password]) \
-                                                == @signin[:password] then
+  elsif email = @signin[:email] then
+    if (@parent = @channel[:parent].fine_one(:email => email)[:password]) == @signin[:password] then
       @@homequest_tokens.store(SecureRandom.hex => @parent[:uuid])
       return {:homequest_token => @@homequest_tokens[@parent[:uuid]]}
     end
   end
-
 end
 
 
@@ -154,14 +165,14 @@ HomeQuest.add_route('POST', '/v1/signup', {
   cross_origin
   # the guts live here
 
-  parent = JSON.parse request.body.read
-  puts parent
-  @client[:parent].insert_one(parent)
+  @parent = JSON.parse request.body.read
+  @parent.store(:children, Array.new)
+  @parent.store(:uuid, SecureRandom.uuid)
+  @client[:parent].insert_one(@parent)
   
   #nilで良い
-  return parent.to_json
+  return nil
 end
-
 
 HomeQuest.add_route('GET', '/v1/status', {
   "resourcePath" => "/Default",
@@ -199,7 +210,7 @@ HomeQuest.add_route('GET', '/v1/task', {
   cross_origin
   # the guts live here
   
-	@task = Array.new
+  @task = Array.new
   content_type :json
   @client[:task].find.each do |document|
     @task << document
@@ -267,7 +278,6 @@ HomeQuest.add_route('DELETE', '/v1/task/{task_uuid}', {
   {"message" => "yes, it worked"}.to_json
 end
 
-
 HomeQuest.add_route('GET', '/v1/task/{task_uuid}', {
   "resourcePath" => "/Default",
   "summary" => "Get Task",
@@ -289,26 +299,18 @@ HomeQuest.add_route('GET', '/v1/task/{task_uuid}', {
 
     ]}) do
   cross_origin
-	# the guts live here
+  # the guts live here
 
-	if !request.body then
-		#uuidの取得
-		request = JSON.parse(request.body.read)
-		uuid = request[:task_uuid]
-
-		content_type :json
-		@task = @client[:task].find(
-			{uuid: uuid}
-		)
-
-		@task.to_json 
-	else
-
-  {"message" => "yes, it worked"}.to_json
-
-	end
+  if !request.body then
+    #uuidの取得
+    request = JSON.parse(request.body.read)
+    uuid = request[:task_uuid]
+    @task = @client[:task].find(:uuid => uuid)
+    @task.to_json 
+  else
+    {"message" => "yes, it worked"}.to_json
+  end
 end
-
 
 HomeQuest.add_route('POST', '/v1/task/{task_uuid}', {
   "resourcePath" => "/Default",
