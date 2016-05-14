@@ -271,9 +271,24 @@ HomeQuest.add_route('GET', '/v1/task/{task_uuid}', {
 
     ]}) do
   cross_origin
-  # the guts live here
+	# the guts live here
+
+	if !request.body then
+		#uuidの取得
+		request = JSON.parse(request.body.read)
+		uuid = request[:task_uuid]
+
+		content_type :json
+		@task = @client[:task].find(
+			{uuid: uuid}
+		)
+
+		@task.to_json 
+	else
 
   {"message" => "yes, it worked"}.to_json
+
+	end
 end
 
 
