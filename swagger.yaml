@@ -6,7 +6,6 @@ info:
   title: "Home Quest"
   license:
     name: "MIT"
-host: "192.168.100.209"
 basePath: "/v1"
 schemes:
 - "http"
@@ -268,6 +267,10 @@ definitions:
         description: "ユーザーは管理者である"
   Signup:
     type: "object"
+    required:
+    - "email"
+    - "family_name"
+    - "password"
     properties:
       email:
         type: "string"
@@ -354,6 +357,9 @@ definitions:
         description: "固定トークン"
   Notification:
     type: "object"
+    required:
+    - "message"
+    - "timestamp"
     properties:
       timestamp:
         type: "integer"
@@ -363,6 +369,9 @@ definitions:
         description: "通知のメッセージ"
   Child:
     type: "object"
+    required:
+    - "given_name"
+    - "login_token"
     properties:
       given_name:
         type: "string"
