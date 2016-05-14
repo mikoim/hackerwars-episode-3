@@ -4,7 +4,8 @@ require 'mongo'
 # only need to extend if you want special configuration!
 class HomeQuest < Swaggering
 	self.configure do |config|
-		config.api_version = '0.0.1' 
+		config.api_version = '0.0.2' 
+		@client = Mongo::Client.new([ 'localhost:27017' ], :database => 'homequest')#, :user => 'root', :password => 'abc123')
 	end
 
   before do

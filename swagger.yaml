@@ -1,8 +1,8 @@
 ---
 swagger: "2.0"
 info:
-  description: "クソガキを矯正するためのToDoアプリ"
-  version: "0.0.1"
+  description: "ToDo App for Kids"
+  version: "0.0.2"
   title: "Home Quest"
   license:
     name: "MIT"
@@ -14,224 +14,214 @@ produces:
 paths:
   /child:
     get:
-      summary: "子供の一覧を取得"
-      parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          $ref: "#/definitions/Child"
+      summary: "Get array of Child"
+      parameters: []
       responses:
         200:
-          description: "Child"
+          description: "Array of Child"
           schema:
-            $ref: "#/definitions/Child"
+            type: "array"
+            items:
+              $ref: "#/definitions/Child"
         default:
-          description: "エラー"
+          description: "Standard error"
           schema:
             $ref: "#/definitions/Error"
       security:
       - api_key: []
     post:
-      summary: "子供を人体錬成"
+      summary: "Create Child"
       parameters:
       - in: "body"
         name: "body"
         required: true
         schema:
-          $ref: "#/definitions/Child"
+          $ref: "#/definitions/newChild"
       responses:
         200:
-          description: "child配列"
+          description: "newChild object"
           schema:
             $ref: "#/definitions/Child"
         default:
-          description: "エラー"
+          description: "Standard error"
           schema:
             $ref: "#/definitions/Error"
       security:
       - api_key: []
   /child/{child_uuid}:
     delete:
-      summary: "子供を消す"
+      summary: "Delete Child"
       parameters:
       - name: "child_uuid"
         in: "path"
-        description: "子供のUUID"
+        description: "UUID of Child"
         required: true
         type: "string"
       responses:
         200:
-          description: "child"
-          schema:
-            $ref: "#/definitions/Child"
+          description: "Child deleted"
         default:
-          description: "エラー"
+          description: "Standard error"
           schema:
             $ref: "#/definitions/Error"
       security:
       - api_key: []
   /notification:
     get:
-      summary: "通知"
-      parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          $ref: "#/definitions/Notification"
+      summary: "Get array of Notification"
+      parameters: []
       responses:
         200:
-          description: "Notification"
+          description: "Array of Notification"
           schema:
-            $ref: "#/definitions/Notification"
+            type: "array"
+            items:
+              $ref: "#/definitions/Notification"
         default:
-          description: "エラー"
+          description: "Standard error"
           schema:
             $ref: "#/definitions/Error"
       security:
       - api_key: []
   /signin:
     post:
-      summary: "サインイン"
+      summary: "Login"
       parameters:
       - in: "body"
         name: "body"
         required: true
         schema:
-          $ref: "#/definitions/Signin"
+          $ref: "#/definitions/newSignin"
       responses:
         200:
-          description: "Signin"
+          description: "Signin object"
           schema:
             $ref: "#/definitions/Signin"
         default:
-          description: "エラー"
+          description: "Standard error"
           schema:
             $ref: "#/definitions/Error"
   /signup:
     post:
-      summary: "家族アカウントを作成"
+      summary: "Register family account"
       parameters:
       - in: "body"
         name: "body"
-        description: "家族アカウントの情報を表すオブジェクト"
-        required: false
+        description: "Signup object"
+        required: true
         schema:
           $ref: "#/definitions/Signup"
       responses:
         200:
-          description: "家族アカウント"
-          schema:
-            $ref: "#/definitions/Signup"
+          description: "Signup succeed"
         default:
-          description: "エラー"
+          description: "Standard error"
           schema:
             $ref: "#/definitions/Error"
       security:
       - api_key: []
   /status:
     get:
-      summary: "ユーザーの状態を取得"
+      summary: "Get Status"
       parameters: []
       responses:
         200:
-          description: "ユーザーの状態"
+          description: "Status object"
           schema:
             $ref: "#/definitions/Status"
         default:
-          description: "エラー"
+          description: "Standard error"
           schema:
             $ref: "#/definitions/Error"
       security:
       - api_key: []
   /task:
     get:
-      summary: "タスクの一覧を取得"
+      summary: "Get array of Task"
       parameters: []
       responses:
         200:
-          description: "タスクの配列"
+          description: "Array of Task object"
           schema:
             type: "array"
             items:
               $ref: "#/definitions/Task"
         default:
-          description: "エラー"
+          description: "Standard error"
           schema:
             $ref: "#/definitions/Error"
       security:
       - api_key: []
     post:
-      summary: "タスクを作成"
+      summary: "Create Task"
       parameters:
       - in: "body"
         name: "body"
         required: true
         schema:
-          $ref: "#/definitions/Task"
+          $ref: "#/definitions/newTask"
       responses:
         200:
-          description: "タスク"
+          description: "Task object"
           schema:
             $ref: "#/definitions/Task"
         default:
-          description: "エラー"
+          description: "Standard error"
           schema:
             $ref: "#/definitions/Error"
       security:
       - api_key: []
   /task/{task_uuid}:
     get:
-      summary: "タスクを取得"
+      summary: "Get Task"
       parameters:
       - name: "task_uuid"
         in: "path"
-        description: "タスクのUUID"
+        description: "UUID of Task"
         required: true
         type: "string"
       responses:
         200:
-          description: "タスク"
+          description: "Task object"
           schema:
             $ref: "#/definitions/Task"
         default:
-          description: "エラー"
+          description: "Standard error"
           schema:
             $ref: "#/definitions/Error"
       security:
       - api_key: []
     post:
-      summary: "タスクの状態を変更"
+      summary: "Update status of Task"
       parameters:
       - name: "task_uuid"
         in: "path"
-        description: "タスクのUUID"
+        description: "UUID of Task"
         required: true
         type: "string"
       - in: "body"
         name: "body"
-        description: "タスクの状態を表すオブジェクト"
+        description: "updateTaskState object"
         required: true
         schema:
-          $ref: "#/definitions/UpdateTaskState"
+          $ref: "#/definitions/updateTaskState"
       responses:
         200:
-          description: "タスク"
+          description: "Task object"
           schema:
             $ref: "#/definitions/Task"
         default:
-          description: "エラー"
+          description: "Standard error"
           schema:
             $ref: "#/definitions/Error"
       security:
       - api_key: []
     delete:
-      summary: "タスクを削除"
+      summary: "Delete Task"
       parameters:
       - name: "task_uuid"
         in: "path"
-        description: "タスクのUUID"
+        description: "UUID of Task"
         required: true
         type: "string"
       responses:
@@ -252,19 +242,23 @@ definitions:
     - "given_name"
     - "is_admin"
     - "point"
+    - "user_uuid"
     properties:
       family_name:
         type: "string"
-        description: "姓"
+        description: "Family name"
       given_name:
         type: "string"
-        description: "名"
+        description: "Given name"
       point:
         type: "integer"
-        description: "ポイント"
+        description: "Point"
       is_admin:
         type: "boolean"
-        description: "ユーザーは管理者である"
+        description: "Is account administrator?"
+      user_uuid:
+        type: "string"
+        description: "UUID of User"
   Signup:
     type: "object"
     required:
@@ -275,17 +269,14 @@ definitions:
       email:
         type: "string"
         format: "email"
-        description: "メールアドレス"
+        description: "E-mail address"
       password:
         type: "string"
-        description: "パスワード"
+        description: "Password"
       family_name:
         type: "string"
-        description: "姓"
-      login_token:
-        type: "string"
-        description: "ログイントークン"
-  Task:
+        description: "Family name"
+  newTask:
     type: "object"
     required:
     - "application_deadline"
@@ -297,64 +288,92 @@ definitions:
     properties:
       title:
         type: "string"
-        description: "クエスト名"
+        description: "Quest name"
       application_deadline:
         type: "integer"
-        description: "応募期限（UNIX TIME, 秒）"
+        description: "Deadline of application"
       completion_deadline:
         type: "integer"
-        description: "完了期限（UNIX TIME, 秒）"
+        description: "Deadline of completion"
       point:
         type: "integer"
-        description: "ポイント"
+        description: "Point"
       difficulty:
         type: "integer"
-        description: "難易度"
+        description: "Difficulty"
       description:
         type: "string"
-        description: "詳細"
-      users:
-        type: "array"
-        description: "クエストを受けている人のリスト"
-        items:
-          type: "string"
-          description: "クエストを受けている人のUUID"
-      is_complete:
+        description: "Description"
+  Task:
+    type: "object"
+    required:
+    - "application_deadline"
+    - "completion_deadline"
+    - "description"
+    - "difficulty"
+    - "is_accept"
+    - "point"
+    - "title"
+    properties:
+      title:
+        type: "string"
+        description: "Quest name"
+      application_deadline:
+        type: "integer"
+        description: "Deadline of application"
+      completion_deadline:
+        type: "integer"
+        description: "Deadline of completion"
+      point:
+        type: "integer"
+        description: "Point"
+      difficulty:
+        type: "integer"
+        description: "Difficulty"
+      description:
+        type: "string"
+        description: "Description"
+      is_accept:
         type: "boolean"
-        description: "クエストは完了している"
-      is_verified:
-        type: "boolean"
-        description: "完了は承諾されている"
-  UpdateTaskState:
+        description: "Is quest accepted?"
+  updateTaskState:
     type: "object"
     properties:
       is_accept:
         type: "boolean"
-        description: "クエストは受注されている"
+        description: "Is quest accepted?"
       is_cancel:
         type: "boolean"
-        description: "クエストはキャンセルされている"
+        description: "Is quest cancelled?"
       is_complete:
         type: "boolean"
-        description: "クエストは完了されている"
+        description: "Is quest completed?"
       is_reject:
         type: "boolean"
-        description: "クエストは断念されている"
+        description: "Is quest rejected?"
       is_verified:
         type: "boolean"
-        description: "クエストの完了は承認されている"
-  Signin:
+        description: "Is quest verified?"
+  newSignin:
     type: "object"
     properties:
       email:
         type: "string"
-        description: "ユーザー名（メールアドレス）"
+        description: "E-mail address"
       password:
         type: "string"
-        description: "パスワード"
+        description: "Password"
       login_token:
         type: "string"
-        description: "固定トークン"
+        description: "Login token"
+  Signin:
+    type: "object"
+    required:
+    - "login_token"
+    properties:
+      login_token:
+        type: "string"
+        description: "Login token"
   Notification:
     type: "object"
     required:
@@ -363,25 +382,34 @@ definitions:
     properties:
       timestamp:
         type: "integer"
-        description: "タイムスタンプ(UNIX TIMESTAMP)"
+        description: "Unix Time Stamp"
       message:
         type: "string"
-        description: "通知のメッセージ"
+        description: "Notify message"
+  newChild:
+    type: "object"
+    required:
+    - "given_name"
+    properties:
+      given_name:
+        type: "string"
+        description: "Given name"
   Child:
     type: "object"
     required:
+    - "family_name"
     - "given_name"
     - "login_token"
     properties:
       given_name:
         type: "string"
-        description: "名"
+        description: "Given name"
       family_name:
         type: "string"
-        description: "性"
+        description: "Family name"
       login_token:
         type: "string"
-        description: "emailの確認についてるアレ"
+        description: "Login token"
   Error:
     type: "object"
     required:
