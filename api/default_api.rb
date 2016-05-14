@@ -13,7 +13,7 @@ HomeQuest.add_route('DELETE', '/v1/child/{child_uuid}', {
     
     {
       "name" => "child_uuid",
-      "description" => "\u5B50\u4F9B\u306E\u306EUUID",
+      "description" => "\u5B50\u4F9B\u306EUUID",
       "dataType" => "string",
       "paramType" => "path",
     },
