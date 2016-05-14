@@ -226,7 +226,7 @@ HomeQuest.add_route('POST', '/v1/task', {
 
 end
 
-
+# Return nothing
 HomeQuest.add_route('DELETE', '/v1/task/{task_uuid}', {
   "resourcePath" => "/Default",
   "summary" => "Delete Task",
@@ -249,6 +249,8 @@ HomeQuest.add_route('DELETE', '/v1/task/{task_uuid}', {
     ]}) do
   cross_origin
   # the guts live here
+    @client[:tasks].find(:uuid => params[:uuid]).delete_one
+    return nil
 
   {"message" => "yes, it worked"}.to_json
 end
