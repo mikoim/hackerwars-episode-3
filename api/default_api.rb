@@ -65,7 +65,7 @@ HomeQuest.add_route('GET', '/v1/child', {
   cross_origin
   # the guts live here
   parent_uuid = @@homequest_tokens[request.env['HTTP_HOMEQUEST_TOKEN']]
-  @client[:parent].find(parent_uuid).limit(1).each do |doc|
+  @client[:parent].find(:uuid => parent_uuid).limit(1).each do |doc|
     @parent = doc
   end
   @parent[:children].to_json
