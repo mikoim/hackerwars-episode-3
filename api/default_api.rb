@@ -5,7 +5,7 @@ require 'securerandom'
 
 def search_for_child(parents, key, value)
   parents.each do |parent|
-    parent.children.find do |child|
+    parent[:children].find do |child|
       child[key] = value
     end
   end
@@ -254,14 +254,27 @@ HomeQuest.add_route('GET', '/v1/task', {
     ]}) do
   cross_origin
   # the guts live here
-  
-  @task = Array.new
   content_type :json
-  @client[:task].find.each do |document|
-    @task << document
-  end
+  
+  @task = [] 
+  uuid = @@homequest_tokens[request.env['HTTP_HOMEQUEST_TOKEN']]
+  @client[:parent].find(:uuid => uuid).limit(1).each do |otona| 
+    @client[:task].find(:owner => uuid).each do |quest|
+      @task << quest
+    end
+
+    #kodononara
+    if otona.count == 0 then
+      @child = search_for_child(@client[:parent].find, :uuid, uuid) 
+      @child[:task].each do |quest|
+        @task << quest
+      end
+    end
+
+  end 
+
   #TODO: return is_accept based on users
-  @task.to_json 
+  return @task.to_json 
 end
 
 # データベースに入れたうえで, 格納した時と同じ挙動
