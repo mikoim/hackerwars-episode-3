@@ -40,7 +40,7 @@ HomeQuest.add_route('DELETE', '/v1/child/{child_uuid}', {
 
 end
 
-
+                                       
 HomeQuest.add_route('GET', '/v1/child', {
   "resourcePath" => "/Default",
   "summary" => "Get array of Child",
@@ -56,11 +56,11 @@ HomeQuest.add_route('GET', '/v1/child', {
     ]}) do
   cross_origin
   # the guts live here
-  parent_uuid = @@homequest_tokens[headers['homequest-token']]
+  parent_uuid = @@homequest_tokens[request.env['HTTP_HOMEQUEST_TOKEN']]
   @client[:parent].find(parent_uuid).limit(1).each do |doc|
-    @parent = doc if parent_uuid
+    @parent = doc
   end
-  @parent[:children] 
+  @parent[:children].to_json
 end
 
 
@@ -86,22 +86,29 @@ HomeQuest.add_route('POST', '/v1/child', {
     ]}) do
   cross_origin
   # the guts live here
-  parent_uuid = @@homequest_tokens[headers['homequest_token']] if @@homequest_tokens[headers['homequest_token']]
+  puts request.env
+  parent_uuid = @@homequest_tokens[request.env['HTTP_HOMEQUEST_TOKEN']]
   uuid = SecureRandom.uuid
   @client[:parent].find(:uuid => parent_uuid).each do |doc|
     @family_name = doc[:family_name] if parent_uuid
   end
-  @child = {given_name: JSON.parse(request.body.read)[:given_name],
-            parent_uuid: parent_uuid,
-            uuid: uuid,
-            family_name: @family_name} 
+  
+  @child = { given_name: JSON.parse(request.body.read)["given_name"],
+             parent_uuid: parent_uuid,
+             uuid: uuid,
+             family_name: @family_name,
+             is_admin: false
+  }
   @child.store(:login_id, SecureRandom.hex)
   #store @child in datebase
   matches = @client[:parent].find(:uuid => parent_uuid)
-  @parent = matches.limit(1)[:children] << @child
+  matches.limit(1).each do |doc|
+    @parent = doc
+    doc[:children] << @child
+  end
   matches.find_one_and_replace(@parent)
   @child.delete(:parent_uuid)
-  @child
+  @child.to_json
 end
 
 
@@ -121,7 +128,16 @@ HomeQuest.add_route('GET', '/v1/notification', {
   cross_origin
   # the guts live here
 
-  {"message" => "yes, it worked"}.to_json
+  @notifi = Array.new
+  content_type :json
+  child_uuid = params[:child_uuid] 
+  @client[:notification].find(:child_uuid => child_uuid).each do |node|
+    @notifi << node.to_json
+    node.delete_one
+  end
+ 
+  return @notifi.to_json 
+
 end
 
 HomeQuest.add_route('POST', '/v1/signin', {
@@ -145,7 +161,7 @@ HomeQuest.add_route('POST', '/v1/signin', {
     @client[:child].find(:login_token => login_token).each do |doc|
       @child = doc
     end
-    @@homequest_tokens.store(SecureRandom.hex => @child[:uuid])
+    @@homequest_tokens.store(SecureRandom.hex, @child[:uuid])
     return {:homequest_token => @@homequest_tokens[@child[:uuid]]}
   elsif @signin["email"] then
     @client[:parent].find(:email => @signin["email"]).limit(1).each do |doc|
@@ -189,6 +205,7 @@ HomeQuest.add_route('POST', '/v1/signup', {
   puts @parent
   @parent.store(:children, Array.new)
   @parent.store(:uuid, SecureRandom.uuid)
+  @parent.store(:is_admin, true)
   @client[:parent].insert_one(@parent)
   
   #nilで良い
@@ -295,8 +312,6 @@ HomeQuest.add_route('DELETE', '/v1/task/{task_uuid}', {
   # the guts live here
     @client[:task].find(:uuid => params[:task_uuid]).delete_one
     return nil
-
-  {"message" => "yes, it worked"}.to_json
 end
 
 HomeQuest.add_route('GET', '/v1/task/{task_uuid}', {
@@ -358,6 +373,81 @@ HomeQuest.add_route('POST', '/v1/task/{task_uuid}', {
       "dataType" => "UpdateTaskState",
       "paramType" => "body",
     }
+
+    ]}) do
+  cross_origin
+  # the guts live here
+
+  {"message" => "yes, it worked"}.to_json
+end
+
+
+
+HomeQuest.add_route('GET', '/v1/reward', {
+  "resourcePath" => "/Default",
+  "summary" => "Get array of Reward",
+  "nickname" => "reward_get",
+  "responseClass" => "array[Reward]",
+  "endpoint" => "/reward",
+  "notes" => "",
+  "parameters" => [
+
+
+
+
+    ]}) do
+  cross_origin
+  # the guts live here
+
+  {"message" => "yes, it worked"}.to_json
+end
+
+
+HomeQuest.add_route('POST', '/v1/reward', {
+  "resourcePath" => "/Default",
+  "summary" => "Create reward",
+  "nickname" => "reward_post",
+  "responseClass" => "Reward",
+  "endpoint" => "/reward",
+  "notes" => "",
+  "parameters" => [
+
+
+
+
+    {
+      "name" => "body",
+      "description" => "",
+      "dataType" => "NewReward",
+      "paramType" => "body",
+    }
+
+    ]}) do
+  cross_origin
+  # the guts live here
+
+  {"message" => "yes, it worked"}.to_json
+end
+
+
+HomeQuest.add_route('GET', '/v1/reward/{reward_uuid}', {
+  "resourcePath" => "/Default",
+  "summary" => "Earn Reward",
+  "nickname" => "reward_reward_uuid_get",
+  "responseClass" => "void",
+  "endpoint" => "/reward/{reward_uuid}",
+  "notes" => "",
+  "parameters" => [
+
+
+    {
+      "name" => "reward_uuid",
+      "description" => "UUID of Reward",
+      "dataType" => "string",
+      "paramType" => "path",
+    },
+
+
 
     ]}) do
   cross_origin

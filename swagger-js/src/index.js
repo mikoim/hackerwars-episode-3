@@ -1,12 +1,12 @@
 (function(factory) {
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
-    define(['./ApiClient', './model/Child', './model/Error', './model/NewChild', './model/NewSignin', './model/NewTask', './model/Notification', './model/Signin', './model/Signup', './model/Status', './model/Task', './model/UpdateTaskState', './api/DefaultApi'], factory);
+    define(['./ApiClient', './model/Child', './model/Error', './model/NewChild', './model/NewReward', './model/NewSignin', './model/NewTask', './model/Notification', './model/Reward', './model/Signin', './model/Signup', './model/Status', './model/Task', './model/UpdateTaskState', './api/DefaultApi'], factory);
   } else if (typeof module === 'object' && module.exports) {
     // CommonJS-like environments that support module.exports, like Node.
-    module.exports = factory(require('./ApiClient'), require('./model/Child'), require('./model/Error'), require('./model/NewChild'), require('./model/NewSignin'), require('./model/NewTask'), require('./model/Notification'), require('./model/Signin'), require('./model/Signup'), require('./model/Status'), require('./model/Task'), require('./model/UpdateTaskState'), require('./api/DefaultApi'));
+    module.exports = factory(require('./ApiClient'), require('./model/Child'), require('./model/Error'), require('./model/NewChild'), require('./model/NewReward'), require('./model/NewSignin'), require('./model/NewTask'), require('./model/Notification'), require('./model/Reward'), require('./model/Signin'), require('./model/Signup'), require('./model/Status'), require('./model/Task'), require('./model/UpdateTaskState'), require('./api/DefaultApi'));
   }
-}(function(ApiClient, Child, Error, NewChild, NewSignin, NewTask, Notification, Signin, Signup, Status, Task, UpdateTaskState, DefaultApi) {
+}(function(ApiClient, Child, Error, NewChild, NewReward, NewSignin, NewTask, Notification, Reward, Signin, Signup, Status, Task, UpdateTaskState, DefaultApi) {
   'use strict';
 
   /**
@@ -62,6 +62,11 @@
      */
     NewChild: NewChild,
     /**
+     * The NewReward model constructor.
+     * @property {module:model/NewReward}
+     */
+    NewReward: NewReward,
+    /**
      * The NewSignin model constructor.
      * @property {module:model/NewSignin}
      */
@@ -76,6 +81,11 @@
      * @property {module:model/Notification}
      */
     Notification: Notification,
+    /**
+     * The Reward model constructor.
+     * @property {module:model/Reward}
+     */
+    Reward: Reward,
     /**
      * The Signin model constructor.
      * @property {module:model/Signin}
