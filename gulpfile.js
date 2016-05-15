@@ -42,7 +42,7 @@ var server = {
 
 gulp.task('build', function (callback) {
     run_sequence(
-        'clean', ['bower', 'compass', 'html', 'image', 'js', 'js-swagger'],
+        ['bower', 'compass', 'html', 'image', 'js', 'js-swagger'],
         callback
     )
 });
