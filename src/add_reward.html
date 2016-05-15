@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title></title>
+    <title>HomeQuest: Create Reward</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -27,13 +27,14 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">ロゴ</a>
+                <a class="navbar-brand" href="./list.html"><img src="images/homequest_logo.png" id="title-logo"></a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="#">クエストリスト<span class="sr-only">(current)</span></a></li>
+                    <li class="active"><a href="./list.html">クエストリスト<span class="sr-only">(current)</span></a></li>
+                    <li><a href="./reward_list.html">報酬リスト</a></li>
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -41,24 +42,27 @@
         <!-- /.container-fluid -->
     </nav>
 
-    <div class="container">
+    <div class="container" id="list-body">
         <section id="reward_form" class="col-sm-6 col-sm-offset-3">
-            <form>
+            <form id="addReward">
                 <div class="form-group">
                     <label for="reward_detail">内容</label>
                     <div class="form-group">
-                        <textarea class="form-control" id="reward_detail" placeholder="例）好きなおもちゃをプレゼント！" rows="1"></textarea>
+                        <textarea v-model="title" class="form-control" id="reward_detail" placeholder="例）好きなおもちゃをプレゼント！" rows="1"></textarea>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="reward">必要なポイント</label>
+                    <label for="required_point">必要なポイント</label>
                     <div class="input-group">
-                        <input type="number" class="form-control" id="required_point" name="required_point" placeholder="1,000">
+                        <input v-model="point" type="number" class="form-control" id="required_point" name="required_point" placeholder="1,000">
                         <span class="input-group-addon" id="basic-addon2">ポイント</span>
                     </div>
                 </div>
                 <div class="form-group text-center">
-                    <button type="submit" class="btn btn-primary">景品を追加</button>
+                    <button v-on:click="createReward" type="button" class="btn btn-primary">景品を追加</button>
+                </div>
+                <div class="form-group text-center">
+                    <p>{{ message }}</p>
                 </div>
             </form>
         </section>
@@ -66,8 +70,68 @@
 
     <script src="./javascripts/bower.js"></script>
     <script src="./javascripts/all.js"></script>
+    <script src="javascripts/swagger.js"></script>
 
     <script>
+        var token = loadHomeQuestToken();
+        if (!token) {
+            redirect('signin.html');
+        }
+        var api = HomeQuest_API(token);
+
+        var rewardForm = new Vue({
+
+            el: '#addReward',
+
+            data: {
+                title: null,
+                point: null,
+                status: null, // common
+                message: null // common
+            },
+
+            created: function() {
+                this.retrieveStatus();
+                if (!this.status['is_admin']) {
+                    redirect('signin.html');
+                }
+
+            },
+
+            methods: {
+                retrieveStatus: function() {
+                    var self = this;
+
+                    api.statusGet(function(error, data, response) {
+                        if (!error) {
+                            self.status = data;
+                        } else {
+                            self.message = error;
+                            console.log(data);
+                            console.log(response);
+                        }
+                    });
+                },
+
+                createReward: function () {
+                    var self = this;
+                    var newReward = new HomeQuest.NewReward();
+
+                    newReward.title = self.title;
+                    newReward.point = self.point;
+
+                    api.rewardPost(newReward, function (error, data, response) {
+                        if (!error) {
+                            redirect('reward_list.html');
+                        } else {
+                            self.message = error;
+                            console.log(data);
+                            console.log(response);
+                        }
+                    });
+                }
+            }
+        })
     </script>
 </body>
 

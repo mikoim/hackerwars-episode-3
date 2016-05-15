@@ -1,23 +1,29 @@
+#list-body {
+    background-color: #ffffff;
+}
+#title-logo {
+    width: auto;
+    height: auto;
+    max-width: 160px;
+    max-height: 40px;
+    margin-top: -10px;
+}
 .quest-title {
     font-size: 1.5em;
     font-weight: bold;
 }
-
-.panel-footer-info{
+.panel-footer-info {
     @extend .panel-footer;
     background: $state-info-bg;
 }
-
-.panel-footer-success{
+.panel-footer-success {
     @extend .panel-footer;
     background: $state-success-bg;
 }
-
 .quest-detail {
     background: white;
     border: none;
 }
-
 .point {
     color: white;
 }
