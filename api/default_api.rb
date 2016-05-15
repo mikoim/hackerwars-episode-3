@@ -6,7 +6,7 @@ require 'securerandom'
 def search_for_child(parents, key, value)
   parents.each do |parent|
     parent[:children].find do |child|
-      child[key] == value
+      child[key] = value
     end
   end
 end
@@ -34,7 +34,7 @@ HomeQuest.add_route('DELETE', '/v1/child/{child_uuid}', {
   cross_origin
   # the guts live here
   uuid = @@homequest_tokens[headers['homequest_token']] if @@homequest_tokens[headers['homequest_token']]
-  
+
   if uuid["is_admin"] then
     @client[:parent].find(prams[:child_uuid]).limit(1).each do |mortal_child|
       mortal.child.delete_one
@@ -48,7 +48,7 @@ HomeQuest.add_route('DELETE', '/v1/child/{child_uuid}', {
 
 end
 
-                                       
+
 HomeQuest.add_route('GET', '/v1/child', {
   "resourcePath" => "/Default",
   "summary" => "Get array of Child",
@@ -99,7 +99,8 @@ HomeQuest.add_route('POST', '/v1/child', {
   @client[:parent].find(:uuid => parent_uuid).each do |doc|
     @family_name = doc[:family_name] if parent_uuid
   end
-  
+
+
   @child = { given_name: JSON.parse(request.body.read)["given_name"],
              parent_uuid: parent_uuid,
              uuid: uuid,
@@ -137,13 +138,13 @@ HomeQuest.add_route('GET', '/v1/notification', {
 
   @notifi = Array.new
   content_type :json
-  child_uuid = params[:child_uuid] 
+  child_uuid = params[:child_uuid]
   @client[:notification].find(:child_uuid => child_uuid).each do |node|
     @notifi << node.to_json
     node.delete_one
   end
- 
-  return @notifi.to_json 
+
+  return @notifi.to_json
 
 end
 
@@ -211,7 +212,7 @@ HomeQuest.add_route('POST', '/v1/signup', {
   @parent.store(:uuid, SecureRandom.uuid)
   @parent.store(:is_admin, true)
   @client[:parent].insert_one(@parent)
-  
+
   #nilで良い
   return nil
 end
@@ -261,14 +262,27 @@ HomeQuest.add_route('GET', '/v1/task', {
     ]}) do
   cross_origin
   # the guts live here
-  
-  @task = Array.new
   content_type :json
-  @client[:task].find.each do |document|
-    @task << document
+
+  @task = []
+  uuid = @@homequest_tokens[request.env['HTTP_HOMEQUEST_TOKEN']]
+  @client[:parent].find(:uuid => uuid).limit(1).each do |otona|
+    @client[:task].find(:owner => uuid).each do |quest|
+      @task << quest
+    end
+
+    #kodononara
+    if otona.count == 0 then
+      @child = search_for_child(@client[:parent].find, :uuid, uuid)
+      @child[:task].each do |quest|
+        @task << quest
+      end
+    end
+
   end
+
   #TODO: return is_accept based on users
-  @task.to_json 
+  return @task.to_json
 end
 
 # データベースに入れたうえで, 格納した時と同じ挙動
@@ -310,7 +324,7 @@ HomeQuest.add_route('DELETE', '/v1/task/{task_uuid}', {
   "endpoint" => "/task/{task_uuid}",
   "notes" => "",
   "parameters" => [
-    
+
 
     {
       "name" => "task_uuid",
@@ -355,8 +369,8 @@ HomeQuest.add_route('GET', '/v1/task/{task_uuid}', {
   @client[:task].find(:uuid => params[:task_uuid]).each do |tmp|
     @task = tmp
   end
-  
-  @task.to_json 
+
+  @task.to_json
 end
 
 HomeQuest.add_route('POST', '/v1/task/{task_uuid}', {
@@ -388,14 +402,14 @@ HomeQuest.add_route('POST', '/v1/task/{task_uuid}', {
     ]}) do
   cross_origin
   # the guts live here
-  
+
   @target_task = {}
   content_type :json
   #一個だけほしかったけど、わからないのでこうなった
   @client[:task].find(:uuid => params[:task_uuid]).each do |tmp|
     @target_task = tmp
   end
-  
+
   task = JSON.parse(request.body.read)
 
   if @target_task then
