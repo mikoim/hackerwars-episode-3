@@ -46,7 +46,10 @@ HomeQuest.add_route('GET', '/v1/child', {
   cross_origin
   # the guts live here
   parent_uuid = @@homequest_tokens[headers['homequest-token']]
-  @client[:parent].find_one(parent_uuid)[children] if parent_uuid
+  @client[:parent].find(parent_uuid).limit(1).each do |doc|
+    @parent = doc if parent_uuid
+  end
+  @parent[:children] 
 end
 
 
@@ -74,9 +77,9 @@ HomeQuest.add_route('POST', '/v1/child', {
   # the guts live here
   parent_uuid = @@homequest_tokens[headers['homequest_token']] if @@homequest_tokens[headers['homequest_token']]
   uuid = SecureRandom.uuid
-  family_name = @client[:parent]
-      .find_one(:uuid => parent_uuid)[:family_name] if parent_uuid
-
+  @client[:parent].find(:uuid => parent_uuid).each do |doc|
+    @family_name = doc[:family_name] if parent_uuid
+  end
   @child = {given_name: JSON.parse(request.body.read)[:given_name],
             parent_uuid: parent_uuid,
             uuid: uuid,
@@ -128,7 +131,9 @@ HomeQuest.add_route('POST', '/v1/signin', {
   # the guts live here
   @signin = JSON.parse request.body.read
   if login_token = @signin["login_token"] then
-    @child = @client[:child].find_one(:login_token => login_token)
+    @client[:child].find(:login_token => login_token).each do |doc|
+      @child = doc
+    end
     @@homequest_tokens.store(SecureRandom.hex => @child[:uuid])
     return {:homequest_token => @@homequest_tokens[@child[:uuid]]}
   elsif @signin["email"] then
