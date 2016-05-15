@@ -29,7 +29,7 @@ HomeQuest.add_route('DELETE', '/v1/child/{child_uuid}', {
   {"message" => "yes, it worked"}.to_json
 end
 
-
+                                       
 HomeQuest.add_route('GET', '/v1/child', {
   "resourcePath" => "/Default",
   "summary" => "Get array of Child",
@@ -83,7 +83,7 @@ HomeQuest.add_route('POST', '/v1/child', {
   @child = {given_name: JSON.parse(request.body.read)[:given_name],
             parent_uuid: parent_uuid,
             uuid: uuid,
-            family_name: family_name} 
+            family_name: @family_name} 
   @child.store(:login_id, SecureRandom.hex)
   #store @child in datebase
   matches = @client[:parent].find(:uuid => parent_uuid)
@@ -110,7 +110,16 @@ HomeQuest.add_route('GET', '/v1/notification', {
   cross_origin
   # the guts live here
 
-  {"message" => "yes, it worked"}.to_json
+  @notifi = Array.new
+  content_type :json
+  child_uuid = params[:child_uuid] 
+  @client[:notification].find(:child_uuid => child_uuid).each do |node|
+    @notifi << node.to_json
+    node.delete_one
+  end
+ 
+  return @notifi.to_json 
+
 end
 
 HomeQuest.add_route('POST', '/v1/signin', {
@@ -134,7 +143,7 @@ HomeQuest.add_route('POST', '/v1/signin', {
     @client[:child].find(:login_token => login_token).each do |doc|
       @child = doc
     end
-    @@homequest_tokens.store(SecureRandom.hex => @child[:uuid])
+    @@homequest_tokens.store(SecureRandom.hex, @child[:uuid])
     return {:homequest_token => @@homequest_tokens[@child[:uuid]]}
   elsif @signin["email"] then
     @client[:parent].find(:email => @signin["email"]).limit(1).each do |doc|
