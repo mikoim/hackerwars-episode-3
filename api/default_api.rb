@@ -386,8 +386,12 @@ HomeQuest.add_route('GET', '/v1/reward', {
     ]}) do
   cross_origin
   # the guts live here
+  @rewards = Array.new
+  @client[:reward].find.each do |doc|
+    @reward << doc
+  end
 
-  {"message" => "yes, it worked"}.to_json
+  rewards.to_json
 end
 
 
@@ -413,8 +417,11 @@ HomeQuest.add_route('POST', '/v1/reward', {
     ]}) do
   cross_origin
   # the guts live here
-
-  {"message" => "yes, it worked"}.to_json
+  @reward = JSON.parse request.body.read
+  @reward.store(:uuid, SecureRandom.uuid)
+  @reward.store(:owner, @@homequest_tokens[request.env['HTTP_HOMEQUEST_TOKEN']])
+  @client[:reward].insert_one(@reward)
+  @reward.to_json
 end
 
 
