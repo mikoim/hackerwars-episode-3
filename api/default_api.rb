@@ -312,15 +312,12 @@ HomeQuest.add_route('GET', '/v1/task/{task_uuid}', {
   cross_origin
   # the guts live here
 
-  if !request.body then
-    #uuidの取得
-    request = JSON.parse(request.body.read)
-    uuid = request[:task_uuid]
-    @task = @client[:task].find(:uuid => uuid)
-    @task.to_json 
-  else
-    {"message" => "yes, it worked"}.to_json
+  content_type :json
+  @client[:task].find(:uuid => params[:task_uuid]).each do |tmp|
+    @task = tmp
   end
+  
+  @task.to_json 
 end
 
 HomeQuest.add_route('POST', '/v1/task/{task_uuid}', {
@@ -363,11 +360,11 @@ HomeQuest.add_route('POST', '/v1/task/{task_uuid}', {
   task = JSON.parse(request.body.read)
 
   if @target_task then
-    @target_task[:is_accept] = task[:is_accept]
-    @target_task[:is_cancel] = task[:is_cancel]
-    @target_task[:is_complete] = task[:is_complete]
-    @target_task[:is_reject] = task[:is_reject]
-    @target_task[:is_verified] = task[:is_verified]
+    @target_task[:is_accept] = task["is_accept"]
+    @target_task[:is_cancel] = task["is_cancel"]
+    @target_task[:is_complete] = task["is_complete"]
+    @target_task[:is_reject] = task["is_reject"]
+    @target_task[:is_verified] = task["is_verified"]
   end
 
   return @target_task.to_json
