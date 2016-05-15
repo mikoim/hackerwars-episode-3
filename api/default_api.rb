@@ -6,7 +6,7 @@ require 'securerandom'
 def search_for_child(parents, key, value)
   parents.each do |parent|
     parent[:children].find do |child|
-      child[key] = value
+      child[key] == value
     end
   end
 end
@@ -34,7 +34,7 @@ HomeQuest.add_route('DELETE', '/v1/child/{child_uuid}', {
   cross_origin
   # the guts live here
   uuid = @@homequest_tokens[headers['homequest_token']] if @@homequest_tokens[headers['homequest_token']]
-
+  
   if uuid["is_admin"] then
     @client[:parent].find(prams[:child_uuid]).limit(1).each do |mortal_child|
       mortal.child.delete_one
