@@ -3,6 +3,14 @@ require 'securerandom'
 
 @@homequest_tokens = Hash.new
 
+def search_for_child(parents, uuid)
+  parents.each do |parent|
+    parent.children.find do |child|
+      child[:uuid] = uuid
+    end
+  end
+end
+
 HomeQuest.add_route('DELETE', '/v1/child/{child_uuid}', {
   "resourcePath" => "/Default",
   "summary" => "Delete Child",
@@ -447,6 +455,17 @@ HomeQuest.add_route('GET', '/v1/reward/{reward_uuid}', {
     ]}) do
   cross_origin
   # the guts live here
-
-  {"message" => "yes, it worked"}.to_json
+  user_uuid = @@homequest_tokens[request.env['HTTP_HOMEQUEST_TOKEN']]
+  unless @user = search_for_child(@client[:parents].find, user_uuid) then
+    return { message: "ユーザーは見つかりませんでした。" }.to_json
+  end
+  @client[:reward].find(:uuid => params[:uuid]).each do |doc|
+    @reward = doc
+  end
+  if @reward[:owner] == @user[:parent_uuid] then
+    @user[:point] -= @reward[:point]
+    matches = @client[:parent].find(:uuid => @user[:parent_uuid])
+    matches.find_one_and_replace(@parent)
+  end
+  return nil
 end
