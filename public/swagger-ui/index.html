@@ -81,8 +81,8 @@
       function addApiKeyAuthorization(){
         var key = encodeURIComponent($('#input_apiKey')[0].value);
         if(key && key.trim() != "") {
-            var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization("homequest-token", key, "header");
-            window.swaggerUi.api.clientAuthorizations.add("homequest-token", apiKeyAuth);
+            var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization("homequest_token", key, "header");
+            window.swaggerUi.api.clientAuthorizations.add("homequest_token", apiKeyAuth);
             log("added key " + key);
         }
       }
