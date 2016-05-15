@@ -86,10 +86,33 @@
             data: {
                 title: null,
                 point: null,
-                message: null
+                status: null, // common
+                message: null // common
+            },
+
+            created: function() {
+                this.retrieveStatus();
+                if (!this.status['is_admin']) {
+                    redirect('signin.html');
+                }
+
             },
 
             methods: {
+                retrieveStatus: function() {
+                    var self = this;
+
+                    api.statusGet(function(error, data, response) {
+                        if (!error) {
+                            self.status = data;
+                        } else {
+                            self.message = error;
+                            console.log(data);
+                            console.log(response);
+                        }
+                    });
+                },
+
                 createReward: function () {
                     var self = this;
                     var newReward = new HomeQuest.NewReward();
