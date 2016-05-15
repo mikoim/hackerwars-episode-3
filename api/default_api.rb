@@ -29,7 +29,7 @@ HomeQuest.add_route('DELETE', '/v1/child/{child_uuid}', {
   {"message" => "yes, it worked"}.to_json
 end
 
-
+                                       
 HomeQuest.add_route('GET', '/v1/child', {
   "resourcePath" => "/Default",
   "summary" => "Get array of Child",
@@ -114,7 +114,16 @@ HomeQuest.add_route('GET', '/v1/notification', {
   cross_origin
   # the guts live here
 
-  {"message" => "yes, it worked"}.to_json
+  @notifi = Array.new
+  content_type :json
+  child_uuid = params[:child_uuid] 
+  @client[:notification].find(:child_uuid => child_uuid).each do |node|
+    @notifi << node.to_json
+    node.delete_one
+  end
+ 
+  return @notifi.to_json 
+
 end
 
 HomeQuest.add_route('POST', '/v1/signin', {
