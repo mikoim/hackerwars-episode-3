@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title></title>
+    <title>HomeQuest: Home</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -27,13 +27,14 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">ロゴ</a>
+                <a class="navbar-brand" href="./list.html"><img src="images/homequest_logo.png" id="title-logo"></a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="#">クエストリスト<span class="sr-only">(current)</span></a></li>
+                    <li class="active"><a href="./list.html">クエストリスト<span class="sr-only">(current)</span></a></li>
+                    <li><a href="./reward_list.html">報酬リスト</a></li>
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -41,7 +42,7 @@
         <!-- /.container-fluid -->
     </nav>
 
-    <div class="container">
+    <div class="container" id="list-body">
         <section id="quest_add" class="text-right">
             <button class="btn btn-default" type="button">
                 クエストを依頼する
@@ -67,17 +68,17 @@
                 <ul class="list-group">
                     <li class="list-group-item">
                         <pre class="quest-detail">
-・上部にクエスト作成画面
-    ・申し込み締め切りの近い日順に並べる
-    ・各クエスト情報を無限ループ
-        ・タイトル
-        ・難しさ
-        ・報酬
-        ・詳細はウィンて伸びて出てくる
-    ・子供がクエストを進行中のタスクは青に
-    ・子供がクエストを完了申請すると緑に
-    ・子供がクエストを締切までに終わらなければ赤に
-                        </pre>
+    ・上部にクエスト作成画面
+        ・申し込み締め切りの近い日順に並べる
+        ・各クエスト情報を無限ループ
+            ・タイトル
+            ・難しさ
+            ・報酬
+            ・詳細はウィンて伸びて出てくる
+        ・子供がクエストを進行中のタスクは青に
+        ・子供がクエストを完了申請すると緑に
+        ・子供がクエストを締切までに終わらなければ赤に
+                            </pre>
                     </li>
                 </ul>
                 <div class="panel-footer-info text-right">

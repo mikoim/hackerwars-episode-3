@@ -2,4 +2,17 @@
 @import "..//..//bower_components/bootstrap-sass/assets/stylesheets/_bootstrap.scss";
 @import "sign.scss";
 @import "list_child";
-@import "quest"
+@import "quest";
+
+body {
+    background-color: #ffffff;
+    background-image: url("/images/map3.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center center;
+}
+
+.container {
+    padding-top: 30px;
+}
