@@ -5,7 +5,7 @@ require 'securerandom'
 
 def search_for_child(parents, key, value)
   parents.each do |parent|
-    parent.children.find do |child|
+    parent[:children].find do |child|
       child[key] = value
     end
   end
@@ -231,10 +231,18 @@ HomeQuest.add_route('GET', '/v1/status', {
     ]}) do
   cross_origin
   # the guts live here
-  
-
-
-  {"message" => "yes, it worked"}.to_json
+  user_uuid = @@homequest_tokens[request.env['HTTP_HOMEQUEST_TOKEN']]
+  puts user_uuid
+  matches = @client[:parent].find(:uuid => user_uuid)
+  if matches.count != 0 then
+    matches.each do |doc|
+      @user = doc
+    end
+    return { "family_name": @user[:family_name], "given_name": @user[:given_name], "point": 0, "is_admin": true, "user_uuid": user_uuid }.to_json
+  else
+    @user = search_for_child(@client[:parents].find, :uuid, user_uuid)
+    return { "family_name": @user[:family_name], "given_name": @user[:given_name], "point": @user[:point], "is_admin": false, "user_uuid": user_uuid }.to_json
+  end
 end
 
 
