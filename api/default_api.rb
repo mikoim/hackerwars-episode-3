@@ -81,10 +81,12 @@ HomeQuest.add_route('POST', '/v1/child', {
   @client[:parent].find(:uuid => parent_uuid).each do |doc|
     @family_name = doc[:family_name] if parent_uuid
   end
-  @child = {given_name: JSON.parse(request.body.read)["given_name"],
-            parent_uuid: parent_uuid,
-            uuid: uuid,
-            family_name: @family_name} 
+  @child = { given_name: JSON.parse(request.body.read)["given_name"],
+             parent_uuid: parent_uuid,
+             uuid: uuid,
+             family_name: @family_name,
+             is_admin: false
+  }
   @child.store(:login_id, SecureRandom.hex)
   #store @child in datebase
   matches = @client[:parent].find(:uuid => parent_uuid)
@@ -191,6 +193,7 @@ HomeQuest.add_route('POST', '/v1/signup', {
   puts @parent
   @parent.store(:children, Array.new)
   @parent.store(:uuid, SecureRandom.uuid)
+  @parent.store(:is_admin, true)
   @client[:parent].insert_one(@parent)
   
   #nilで良い
@@ -297,8 +300,6 @@ HomeQuest.add_route('DELETE', '/v1/task/{task_uuid}', {
   # the guts live here
     @client[:task].find(:uuid => params[:task_uuid]).delete_one
     return nil
-
-  {"message" => "yes, it worked"}.to_json
 end
 
 HomeQuest.add_route('GET', '/v1/task/{task_uuid}', {
