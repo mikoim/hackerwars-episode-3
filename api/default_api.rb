@@ -367,3 +367,78 @@ HomeQuest.add_route('POST', '/v1/task/{task_uuid}', {
 
   {"message" => "yes, it worked"}.to_json
 end
+
+
+
+HomeQuest.add_route('GET', '/v1/reward', {
+  "resourcePath" => "/Default",
+  "summary" => "Get array of Reward",
+  "nickname" => "reward_get",
+  "responseClass" => "array[Reward]",
+  "endpoint" => "/reward",
+  "notes" => "",
+  "parameters" => [
+
+
+
+
+    ]}) do
+  cross_origin
+  # the guts live here
+
+  {"message" => "yes, it worked"}.to_json
+end
+
+
+HomeQuest.add_route('POST', '/v1/reward', {
+  "resourcePath" => "/Default",
+  "summary" => "Create reward",
+  "nickname" => "reward_post",
+  "responseClass" => "Reward",
+  "endpoint" => "/reward",
+  "notes" => "",
+  "parameters" => [
+
+
+
+
+    {
+      "name" => "body",
+      "description" => "",
+      "dataType" => "NewReward",
+      "paramType" => "body",
+    }
+
+    ]}) do
+  cross_origin
+  # the guts live here
+
+  {"message" => "yes, it worked"}.to_json
+end
+
+
+HomeQuest.add_route('GET', '/v1/reward/{reward_uuid}', {
+  "resourcePath" => "/Default",
+  "summary" => "Earn Reward",
+  "nickname" => "reward_reward_uuid_get",
+  "responseClass" => "void",
+  "endpoint" => "/reward/{reward_uuid}",
+  "notes" => "",
+  "parameters" => [
+
+
+    {
+      "name" => "reward_uuid",
+      "description" => "UUID of Reward",
+      "dataType" => "string",
+      "paramType" => "path",
+    },
+
+
+
+    ]}) do
+  cross_origin
+  # the guts live here
+
+  {"message" => "yes, it worked"}.to_json
+end

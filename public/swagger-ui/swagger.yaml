@@ -83,6 +83,60 @@ paths:
             $ref: "#/definitions/Error"
       security:
       - api_key: []
+  /reward:
+    get:
+      summary: "Get array of Reward"
+      parameters: []
+      responses:
+        200:
+          description: "Array of Reward object"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Reward"
+        default:
+          description: "Standard error"
+          schema:
+            $ref: "#/definitions/Error"
+      security:
+      - api_key: []
+    post:
+      summary: "Create reward"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/newReward"
+      responses:
+        200:
+          description: "Reward object"
+          schema:
+            $ref: "#/definitions/Reward"
+        default:
+          description: "Standard error"
+          schema:
+            $ref: "#/definitions/Error"
+      security:
+      - api_key: []
+  /reward/{reward_uuid}:
+    get:
+      summary: "Earn Reward"
+      parameters:
+      - name: "reward_uuid"
+        in: "path"
+        description: "UUID of Reward"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+        default:
+          description: "Standard error"
+          schema:
+            $ref: "#/definitions/Error"
+      security:
+      - api_key: []
   /signin:
     post:
       summary: "Login"
@@ -428,6 +482,34 @@ definitions:
       login_token:
         type: "string"
         description: "Login token"
+  newReward:
+    type: "object"
+    required:
+    - "point"
+    - "title"
+    properties:
+      title:
+        type: "string"
+        description: "Reward name"
+      point:
+        type: "integer"
+        description: "Cost"
+  Reward:
+    type: "object"
+    required:
+    - "point"
+    - "title"
+    - "uuid"
+    properties:
+      uuid:
+        type: "string"
+        description: "UUID of Reward"
+      title:
+        type: "string"
+        description: "Reward name"
+      point:
+        type: "integer"
+        description: "Cost"
   Error:
     type: "object"
     required:
