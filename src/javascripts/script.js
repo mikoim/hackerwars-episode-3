@@ -20,12 +20,7 @@ function HomeQuest_API(token) {
     return api;
 }
 
-window.loadHomeQuestToken = loadHomeQuestToken;
-window.saveHomeQuestToken = saveHomeQuestToken;
-window.redirect = redirect;
-window.HomeQuest_API = HomeQuest_API;
-
-function star(level) {
+function int2star(level) {
     var out;
     switch (level) {
         case 1:
@@ -50,9 +45,9 @@ function star(level) {
     return out;
 }
 
-function unixtime(second) {
-    millsecond = second * 1000;
-    var date = new Date(millsecond);
+function epoch2str(unix) {
+    var milliseconds = unix * 1000;
+    var date = new Date(milliseconds);
     var day_of_the_week = ['月', '火', '水', '木', '金', '土', '日'];
     var month = ("0" + (date.getMonth() + 1)).slice(-2);
     var day = ("0" + date.getDate()).slice(-2);
@@ -60,6 +55,13 @@ function unixtime(second) {
     var minute = ("0" + date.getMinutes()).slice(-2);
     var second = ("0" + date.getSeconds()).slice(-2);
     var week_day = day_of_the_week[date.getDay()];
-    out = month + "月" + day + "日（" + week_day + "） " + hour + "時" + minute + "分" + second + "秒";
-    return out;
+    return month + "月" + day + "日（" + week_day + "） " + hour + "時" + minute + "分" + second + "秒";
 }
+
+window.loadHomeQuestToken = loadHomeQuestToken;
+window.saveHomeQuestToken = saveHomeQuestToken;
+window.redirect = redirect;
+window.HomeQuest_API = HomeQuest_API;
+window.int2star = int2star;
+window.epoch2str = epoch2str;
+
