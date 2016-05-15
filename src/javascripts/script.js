@@ -60,8 +60,11 @@ function epoch2str(unix) {
 
 window.loadHomeQuestToken = loadHomeQuestToken;
 window.saveHomeQuestToken = saveHomeQuestToken;
+
 window.redirect = redirect;
-window.HomeQuest_API = HomeQuest_API;
+
 window.int2star = int2star;
 window.epoch2str = epoch2str;
+
+window.HomeQuest_API = HomeQuest_API;
 
