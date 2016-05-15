@@ -1,0 +1,23 @@
+{
+  "name": "HomeQuest",
+  "description": "ToDo App for Kids",
+  "main": "index.js",
+  "authors": [
+    "DIT (dit.rohm@gmail.com)"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/mikoim/hackerwars-episode-3",
+  "moduleType": [],
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.4",
+    "bootstrap-sass": "~3.3.6"
+  }
+}

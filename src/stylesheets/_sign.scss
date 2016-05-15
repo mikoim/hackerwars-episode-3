@@ -1,0 +1,18 @@
+#wrapper {
+  text-align:center;
+
+}
+
+#logo {
+	img {
+		width: 80%;
+	}
+}
+
+.logo-division {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-content: center;
+    height: 100vh;
+}
