@@ -25,8 +25,19 @@ HomeQuest.add_route('DELETE', '/v1/child/{child_uuid}', {
     ]}) do
   cross_origin
   # the guts live here
+  uuid = @@homequest_tokens[headers['homequest_token']] if @@homequest_tokens[headers['homequest_token']]
 
-  {"message" => "yes, it worked"}.to_json
+  if uuid["is_admin"] then
+    @client[:parent].find(prams[:child_uuid]).limit(1).each do |mortal_child|
+      mortal.child.delete_one
+      return nil
+    end
+  else
+    {"message" => "you is not admin"}.to_json
+  end
+
+
+
 end
 
 
@@ -83,7 +94,7 @@ HomeQuest.add_route('POST', '/v1/child', {
   @child = {given_name: JSON.parse(request.body.read)[:given_name],
             parent_uuid: parent_uuid,
             uuid: uuid,
-            family_name: family_name} 
+            family_name: @family_name} 
   @child.store(:login_id, SecureRandom.hex)
   #store @child in datebase
   matches = @client[:parent].find(:uuid => parent_uuid)
