@@ -175,7 +175,6 @@ HomeQuest.add_route('POST', '/v1/signup', {
   # the guts live here
 
   @parent = JSON.parse request.body.read
-  puts @parent
   @parent.store(:children, Array.new)
   @parent.store(:uuid, SecureRandom.uuid)
   @client[:parent].insert_one(@parent)
@@ -199,6 +198,8 @@ HomeQuest.add_route('GET', '/v1/status', {
     ]}) do
   cross_origin
   # the guts live here
+  
+
 
   {"message" => "yes, it worked"}.to_json
 end
@@ -351,6 +352,24 @@ HomeQuest.add_route('POST', '/v1/task/{task_uuid}', {
     ]}) do
   cross_origin
   # the guts live here
+  
+  @target_task = {}
+  content_type :json
+  #一個だけほしかったけど、わからないのでこうなった
+  @client[:task].find(:uuid => params[:task_uuid]).each do |tmp|
+    @target_task = tmp
+  end
+  
+  task = JSON.parse(request.body.read)
 
-  {"message" => "yes, it worked"}.to_json
+  if @target_task then
+    @target_task[:is_accept] = task[:is_accept]
+    @target_task[:is_cancel] = task[:is_cancel]
+    @target_task[:is_complete] = task[:is_complete]
+    @target_task[:is_reject] = task[:is_reject]
+    @target_task[:is_verified] = task[:is_verified]
+  end
+
+  return @target_task.to_json
+
 end
