@@ -3,10 +3,10 @@ require 'securerandom'
 
 @@homequest_tokens = Hash.new
 
-def search_for_child(parents, uuid)
+def search_for_child(parents, key, value)
   parents.each do |parent|
     parent.children.find do |child|
-      child[:uuid] = uuid
+      child[key] = value
     end
   end
 end
@@ -33,8 +33,19 @@ HomeQuest.add_route('DELETE', '/v1/child/{child_uuid}', {
     ]}) do
   cross_origin
   # the guts live here
+  uuid = @@homequest_tokens[headers['homequest_token']] if @@homequest_tokens[headers['homequest_token']]
 
-  {"message" => "yes, it worked"}.to_json
+  if uuid["is_admin"] then
+    @client[:parent].find(prams[:child_uuid]).limit(1).each do |mortal_child|
+      mortal.child.delete_one
+      return nil
+    end
+  else
+    {"message" => "you is not admin"}.to_json
+  end
+
+
+
 end
 
                                        
@@ -54,7 +65,7 @@ HomeQuest.add_route('GET', '/v1/child', {
   cross_origin
   # the guts live here
   parent_uuid = @@homequest_tokens[request.env['HTTP_HOMEQUEST_TOKEN']]
-  @client[:parent].find(parent_uuid).limit(1).each do |doc|
+  @client[:parent].find(:uuid => parent_uuid).limit(1).each do |doc|
     @parent = doc
   end
   @parent[:children].to_json
@@ -83,19 +94,19 @@ HomeQuest.add_route('POST', '/v1/child', {
     ]}) do
   cross_origin
   # the guts live here
-  puts request.env
   parent_uuid = @@homequest_tokens[request.env['HTTP_HOMEQUEST_TOKEN']]
   uuid = SecureRandom.uuid
   @client[:parent].find(:uuid => parent_uuid).each do |doc|
     @family_name = doc[:family_name] if parent_uuid
   end
+  
   @child = { given_name: JSON.parse(request.body.read)["given_name"],
              parent_uuid: parent_uuid,
              uuid: uuid,
              family_name: @family_name,
              is_admin: false
   }
-  @child.store(:login_id, SecureRandom.hex)
+  @child.store(:login_token, SecureRandom.hex)
   #store @child in datebase
   matches = @client[:parent].find(:uuid => parent_uuid)
   matches.limit(1).each do |doc|
@@ -154,9 +165,7 @@ HomeQuest.add_route('POST', '/v1/signin', {
   # the guts live here
   @signin = JSON.parse request.body.read
   if login_token = @signin["login_token"] then
-    @client[:child].find(:login_token => login_token).each do |doc|
-      @child = doc
-    end
+    @child = search_for_child(@client[:parent].find, :login_token, login_token)
     @@homequest_tokens.store(SecureRandom.hex, @child[:uuid])
     return {:homequest_token => @@homequest_tokens[@child[:uuid]]}
   elsif @signin["email"] then
@@ -198,7 +207,6 @@ HomeQuest.add_route('POST', '/v1/signup', {
   # the guts live here
 
   @parent = JSON.parse request.body.read
-  puts @parent
   @parent.store(:children, Array.new)
   @parent.store(:uuid, SecureRandom.uuid)
   @parent.store(:is_admin, true)
@@ -223,6 +231,8 @@ HomeQuest.add_route('GET', '/v1/status', {
     ]}) do
   cross_origin
   # the guts live here
+  
+
 
   {"message" => "yes, it worked"}.to_json
 end
@@ -333,15 +343,12 @@ HomeQuest.add_route('GET', '/v1/task/{task_uuid}', {
   cross_origin
   # the guts live here
 
-  if !request.body then
-    #uuidの取得
-    request = JSON.parse(request.body.read)
-    uuid = request[:task_uuid]
-    @task = @client[:task].find(:uuid => uuid)
-    @task.to_json 
-  else
-    {"message" => "yes, it worked"}.to_json
+  content_type :json
+  @client[:task].find(:uuid => params[:task_uuid]).each do |tmp|
+    @task = tmp
   end
+  
+  @task.to_json 
 end
 
 HomeQuest.add_route('POST', '/v1/task/{task_uuid}', {
@@ -373,8 +380,26 @@ HomeQuest.add_route('POST', '/v1/task/{task_uuid}', {
     ]}) do
   cross_origin
   # the guts live here
+  
+  @target_task = {}
+  content_type :json
+  #一個だけほしかったけど、わからないのでこうなった
+  @client[:task].find(:uuid => params[:task_uuid]).each do |tmp|
+    @target_task = tmp
+  end
+  
+  task = JSON.parse(request.body.read)
 
-  {"message" => "yes, it worked"}.to_json
+  if @target_task then
+    @target_task[:is_accept] = task["is_accept"]
+    @target_task[:is_cancel] = task["is_cancel"]
+    @target_task[:is_complete] = task["is_complete"]
+    @target_task[:is_reject] = task["is_reject"]
+    @target_task[:is_verified] = task["is_verified"]
+  end
+
+  return @target_task.to_json
+
 end
 
 
@@ -396,10 +421,10 @@ HomeQuest.add_route('GET', '/v1/reward', {
   # the guts live here
   @rewards = Array.new
   @client[:reward].find.each do |doc|
-    @reward << doc
+    @rewards << doc
   end
 
-  rewards.to_json
+  @rewards.to_json
 end
 
 
@@ -456,7 +481,7 @@ HomeQuest.add_route('GET', '/v1/reward/{reward_uuid}', {
   cross_origin
   # the guts live here
   user_uuid = @@homequest_tokens[request.env['HTTP_HOMEQUEST_TOKEN']]
-  unless @user = search_for_child(@client[:parents].find, user_uuid) then
+  unless @user = search_for_child(@client[:parents].find, :uuid, user_uuid) then
     return { message: "ユーザーは見つかりませんでした。" }.to_json
   end
   @client[:reward].find(:uuid => params[:uuid]).each do |doc|

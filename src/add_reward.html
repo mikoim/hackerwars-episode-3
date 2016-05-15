@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title></title>
+    <title>HomeQuest: Create Reward</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -44,22 +44,25 @@
 
     <div class="container" id="list-body">
         <section id="reward_form" class="col-sm-6 col-sm-offset-3">
-            <form>
+            <form id="addReward">
                 <div class="form-group">
                     <label for="reward_detail">内容</label>
                     <div class="form-group">
-                        <textarea class="form-control" id="reward_detail" placeholder="例）好きなおもちゃをプレゼント！" rows="1"></textarea>
+                        <textarea v-model="title" class="form-control" id="reward_detail" placeholder="例）好きなおもちゃをプレゼント！" rows="1"></textarea>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="reward">必要なポイント</label>
+                    <label for="required_point">必要なポイント</label>
                     <div class="input-group">
-                        <input type="number" class="form-control" id="required_point" name="required_point" placeholder="1,000">
+                        <input v-model="point" type="number" class="form-control" id="required_point" name="required_point" placeholder="1,000">
                         <span class="input-group-addon" id="basic-addon2">ポイント</span>
                     </div>
                 </div>
                 <div class="form-group text-center">
-                    <button type="submit" class="btn btn-primary">景品を追加</button>
+                    <button v-on:click="createReward" type="button" class="btn btn-primary">景品を追加</button>
+                </div>
+                <div class="form-group text-center">
+                    <p>{{ message }}</p>
                 </div>
             </form>
         </section>
@@ -67,8 +70,45 @@
 
     <script src="./javascripts/bower.js"></script>
     <script src="./javascripts/all.js"></script>
+    <script src="javascripts/swagger.js"></script>
 
     <script>
+        var token = loadHomeQuestToken();
+        if (!token) {
+            // redirect('signin.html');
+        }
+        var api = HomeQuest_API(token);
+
+        var rewardForm = new Vue({
+
+            el: '#addReward',
+
+            data: {
+                title: null,
+                point: null,
+                message: null
+            },
+
+            methods: {
+                createReward: function () {
+                    var self = this;
+                    var newReward = new HomeQuest.NewReward();
+
+                    newReward.title = self.title;
+                    newReward.point = self.point;
+
+                    api.rewardPost(newReward, function (error, data, response) {
+                        if (!error) {
+                            redirect('reward_list.html');
+                        } else {
+                            self.message = error;
+                            console.log(data);
+                            console.log(response);
+                        }
+                    });
+                }
+            }
+        })
     </script>
 </body>
 

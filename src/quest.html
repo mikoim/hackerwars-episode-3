@@ -44,17 +44,24 @@
 
     <div class="container" id="list-body">
         <section id="quest_form">
-            <form>
+            <form id="createQuest">
                 <div class="form-group col-xs-12">
                     <label for="quest_name">クエスト名</label>
                     <div class="input-group">
-                        <input type="text" class="form-control" id="quest_name" name="quest_name" placeholder="クエスト名">
+                        <input v-model="title" type="text" class="form-control" id="quest_name" name="quest_name" placeholder="クエスト名">
                         <span class="input-group-addon" id="basic-addon1">せよ！！</span>
+                    </div>
+                </div>
+                <div class="form-group col-xs-12">
+                    <label for="reward">報酬</label>
+                    <div class="input-group">
+                        <input v-model="point" type="number" class="form-control" id="reward" name="reward" placeholder="達成した時の報酬ポイント">
+                        <span class="input-group-addon" id="basic-addon2">ポイント</span>
                     </div>
                 </div>
                 <div class="form-group col-sm-4">
                     <label for="level">むずかしさ</label>
-                    <select class="form-control" id="level" name="level">
+                    <select v-model="difficulty" class="form-control" id="level" name="level">
                         <option value="0">★☆☆☆☆：チョ～かんたん！</option>
                         <option value="1">★★☆☆☆：かんたん！</option>
                         <option value="2">★★★☆☆：ふつう</option>
@@ -64,23 +71,26 @@
                 </div>
                 <div class="form-group col-sm-4">
                     <label for="limit-for-entry">応募締め切り</label>
-                    <input type="text" class="form-control" id="limit-for-entry" name="limit-for-entry" placeholder="1999-01-01 00:00">
+                    <input v-model="application_deadline" type="text" class="form-control" id="limit-for-entry" name="limit-for-entry" placeholder="1999-01-01 00:00">
                 </div>
                 <div class="form-group col-sm-4">
                     <label for="limit-for-done">応募締め切り</label>
-                    <input type="text" class="form-control" id="limit-for-done" name="limit-for-done" placeholder="1999-01-01 00:00">
+                    <input v-model="completion_deadline" type="text" class="form-control" id="limit-for-done" name="limit-for-done" placeholder="1999-01-01 00:00">
                 </div>
                 <div class="form-group col-xs-12">
                     <label for="quest_detail">クエスト詳細（任意）</label>
-                    <textarea class="form-control" id="quest_detail" rows="3"></textarea>
+                    <textarea v-model="description" class="form-control" id="quest_detail" rows="3"></textarea>
                 </div>
                 <div class="form-group text-center">
-                    <button type="submit" class="btn btn-primary">クエストを作成</button>
+                    <button v-on:click="createQuest" type="button" class="btn btn-primary">クエストを作成</button>
                 </div>
-    </div>
-    </div>
-    </form>
-    </section>
+                <div class="form-group col-xs-12">
+                    <div class="input-group">
+                        <p>{{ message }}</p>
+                    </div>
+                </div>
+            </form>
+        </section>
     </div>
 
     <script src="javascripts/bower.js"></script>
@@ -88,7 +98,52 @@
     <script src="javascripts/swagger.js"></script>
 
     <script>
+        var token = loadHomeQuestToken();
+        if (!token) {
+            redirect('signin.html');
+        }
+        var api = HomeQuest_API(token);
+
+        var createQuest = new Vue({
+
+            el: '#createQuest',
+
+            data: {
+                title: null,
+                application_deadline: null,
+                completion_deadline: null,
+                point: null,
+                difficulty: null,
+                description: null,
+                message: null
+            },
+
+            methods: {
+                createQuest: function() {
+                    var self = this;
+                    var newTask = new HomeQuest.NewTask();
+
+                    newTask.title = self.title;
+                    newTask.application_deadline = self.application_deadline;
+                    newTask.completion_deadline = self.completion_deadline;
+                    newTask.point = self.point;
+                    newTask.difficulty = self.difficulty;
+                    newTask.description = self.description;
+
+                    api.taskPost(newTask, function(error, data, response) {
+                        if (!error) {
+                            redirect('list.html');
+                        } else {
+                            self.message = error;
+                            console.log(data);
+                            console.log(response);
+                        }
+                    });
+                }
+            }
+        })
     </script>
+
 </body>
 
 </html>
