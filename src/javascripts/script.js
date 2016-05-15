@@ -60,6 +60,10 @@ function epoch2str(unix) {
     return month + "月" + day + "日（" + week_day + "） " + hour + "時" + minute + "分" + second + "秒";
 }
 
+function str2epoch(str) {
+    return new Date(str).getTime() / 1000.0;
+}
+
 window.loadHomeQuestToken = loadHomeQuestToken;
 window.saveHomeQuestToken = saveHomeQuestToken;
 
@@ -67,6 +71,7 @@ window.redirect = redirect;
 
 window.int2star = int2star;
 window.epoch2str = epoch2str;
+window.str2epoch = str2epoch;
 
 window.HomeQuest_API = HomeQuest_API;
 

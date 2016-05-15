@@ -124,8 +124,8 @@
                     var newTask = new HomeQuest.NewTask();
 
                     newTask.title = self.title;
-                    newTask.application_deadline = self.application_deadline;
-                    newTask.completion_deadline = self.completion_deadline;
+                    newTask.application_deadline = str2epoch(self.application_deadline);
+                    newTask.completion_deadline = str2epoch(self.completion_deadline);
                     newTask.point = self.point;
                     newTask.difficulty = self.difficulty;
                     newTask.description = self.description;
