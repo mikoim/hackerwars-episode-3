@@ -83,11 +83,14 @@ HomeQuest.add_route('POST', '/v1/child', {
   @child = {given_name: JSON.parse(request.body.read)[:given_name],
             parent_uuid: parent_uuid,
             uuid: uuid,
-            family_name: family_name} 
+            family_name: @family_name} 
   @child.store(:login_id, SecureRandom.hex)
   #store @child in datebase
   matches = @client[:parent].find(:uuid => parent_uuid)
-  @parent = matches.limit(1)[:children] << @child
+  matches.limit(1).each do |doc|
+    @parent = doc
+    doc[:children] << @child
+  end
   matches.find_one_and_replace(@parent)
   @child.delete(:parent_uuid)
   @child
