@@ -1,56 +1,50 @@
-# gulp.js-template
+# HOME†QUEST
+ToDo App for Kids.
 
-Automate and enhance my (and your) workflow.
+## Feature
+ - FILL IN THIS BLANK
 
-## Requirements
+## Library / Framework
 
-- node.js
-- npm
-- bower
-- Ruby
-- Bundler
+### Frontend
 
-## Usage
+ - Bootstrap : http://getbootstrap.com/
+ - Swagger : http://swagger.io/
+ - url-parse : https://github.com/unshiftio/url-parse
+ - Vus.js : https://vuejs.org/
 
-### Run all tasks
+### Backend
 
-```sh
-$ npm run start
-```
-or
-
-```sh
-$ gulp start
-```
-
-### Run build task
-
-```sh
-$ npm run build
-```
-or
-
-```sh
-$ gulp build
-```
-
-### Run other task
-
-```sh
-$ gulp <task>
-```
-
-## Installation
-
-```sh
-$ git clone git@github.com:Tamrin007/gulp.js-template.git <path/to/project>
-$ cd <path/to/project>
-$ rm -rf .git/
-$ npm install
-$ npm run bower install
-$ bundle install --path vendor/bundle
-```
+ - Sinatra : http://www.sinatrarb.com/
+ - Swagger : http://swagger.io/
+ - MongoDB : https://www.mongodb.com/
 
 ## License
 
-The code is available under the MIT license.
+```
+The MIT License (MIT)
+
+Copyright (c) 2016 Shingo Iino / Design
+Copyright (c) 2016 Shun Tamura / Front-end
+Copyright (c) 2016 Eshin Kunishima / Front-end <-> Server-side
+Copyright (c) 2016 Tomoya Tabuchi / Server-side
+Copyright (c) 2016 Hyoga Yoshida / Server-side
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
