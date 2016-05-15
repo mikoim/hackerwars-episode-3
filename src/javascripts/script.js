@@ -16,7 +16,9 @@ function redirect(url) {
 
 function HomeQuest_API(token) {
     var api = new HomeQuest.DefaultApi();
-    api.apiClient.authentications.api_key = token;
+    if (token) {
+        api.apiClient.authentications.api_key.apiKey = token;
+    }
     return api;
 }
 
