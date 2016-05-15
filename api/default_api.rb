@@ -87,6 +87,7 @@ HomeQuest.add_route('POST', '/v1/child', {
             family_name: @family_name} 
   @child.store(:login_id, SecureRandom.hex)
   #store @child in datebase
+  matches = @client[:parent].find(:uuid => parent_uuid)
   matches.limit(1).each do |doc|
     @parent = doc
     doc[:children] << @child
