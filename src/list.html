@@ -53,15 +53,15 @@
     -->
         <section id="quest-list">
             <div class="page-header">
-                <h1>○○家のクエストリスト</h1>
-                <small>○○家では次のクエストを募集しているぞ！</small>
+                <h1>{{ status.family_name }} 家のクエストリスト</h1>
+                <small>{{ status.family_name }} 家では次のクエストを募集しているぞ！</small>
             </div>
 
             <div class="row">
                 <div class="col-xs-8 col-sm-4">
                     <div class="thumbnail">
                         <div class="caption">
-                            <h4>{{ status.given_name }}のステータス</h4>
+                            <h4>{{ status.given_name }} のステータス</h4>
                             <ul>
                                 <!-- <li>完了クエスト数：　5</li> -->
                                 <li>現在のポイント： {{ status.point }} pt</li>
@@ -180,8 +180,8 @@
 
             data: {
                 tasks: null,
-                status: null,
-                message: null
+                status: null, // common
+                message: null // common
             },
 
             filters: {
