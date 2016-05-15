@@ -12,37 +12,38 @@
 </head>
 
 <body>
-<!--[if lt IE 8]>
+    <!--[if lt IE 8]>
 <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
 <![endif]-->
 
-<!-- Add your site or application content here -->
-<nav class="navbar navbar-inverse navbar-static-top">
-    <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="#">ロゴ</a>
-        </div>
+    <!-- Add your site or application content here -->
+    <nav class="navbar navbar-inverse navbar-static-top">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="./list.html"><img src="images/homequest_logo.png" id="title-logo"></a>
+            </div>
 
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav">
-                <li class="active"><a href="#">クエストリスト<span class="sr-only">(current)</span></a></li>
-            </ul>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="./list.html">クエストリスト<span class="sr-only">(current)</span></a></li>
+                    <li><a href="./reward_list.html">報酬リスト</a></li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
         </div>
-        <!-- /.navbar-collapse -->
-    </div>
-    <!-- /.container-fluid -->
-</nav>
+        <!-- /.container-fluid -->
+    </nav>
 
-<div class="container">
-    <!--
+    <div class="container" id="list-body">
+        <!--
     <section id="done-quest-alerts">
         <div id="done-quest-alert" class="alert alert-success alert-dismissible" role="alert">
             <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -50,54 +51,55 @@
         </div>
     </section>
     -->
+        <section id="quest-list">
+            <div class="page-header">
+                <h1>○○家のクエストリスト</h1>
+                <small>○○家では次のクエストを募集しているぞ！</small>
+            </div>
 
-    <section id="quest-list">
-        <div class="page-header">
-            <h1>○○家のクエストリスト</h1>
-            <small>○○家では次のクエストを募集しているぞ！</small>
-        </div>
-
-        <div class="row">
-            <div class="col-xs-8 col-sm-4">
-                <div class="thumbnail">
-                    <div class="caption">
-                        <h4>{{ status.given_name }}のステータス</h4>
-                        <ul>
-                            <!-- <li>完了クエスト数：　5</li> -->
-                            <li>現在のポイント： {{ status.point }} pt</li>
-                            <li>{{ message }}</li>
-                        </ul>
+            <div class="row">
+                <div class="col-xs-8 col-sm-4">
+                    <div class="thumbnail">
+                        <div class="caption">
+                            <h4>{{ status.given_name }}のステータス</h4>
+                            <ul>
+                                <!-- <li>完了クエスト数：　5</li> -->
+                                <li>現在のポイント： {{ status.point }} pt</li>
+                                <li>{{ message }}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12">
+                    <div v-for="t in tasks">
+                        <p class="lead">{{ t.application_deadline | epoch2str }} まで受注可能</p>
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                {{ t.completion_deadline | epoch2str }} / むずかしさ： {{ t.difficulty | int2star }} / 報酬：なし
+                            </div>
+                            <div class="panel-body">
+                                <p class="quest-title text-center">
+                                    {{ t.title }}
+                                </p>
+                            </div>
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    <pre class="quest-detail">
+                                        {{ t.description }}
+                                    </pre>
+                                </li>
+                            </ul>
+                            <div class="panel-footer-info text-right">
+                                <button type="button" class="btn btn-primary">おわった</button>
+                                <button type="button" class="btn btn-danger">あきらめる</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div v-for="t in tasks">
-            <p class="lead">{{ t.application_deadline | epoch2str }} まで受注可能</p>
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    {{ t.completion_deadline | epoch2str }} / むずかしさ： {{ t.difficulty | int2star }} / 報酬：なし
-                </div>
-                <div class="panel-body">
-                    <p class="quest-title text-center">
-                        {{ t.title }}
-                    </p>
-                </div>
-                <ul class="list-group">
-                    <li class="list-group-item">
-                        <pre class="quest-detail">
-                            {{ t.description }}
-                        </pre>
-                    </li>
-                </ul>
-                <div class="panel-footer-info text-right">
-                    <button type="button" class="btn btn-primary">おわった</button>
-                    <button type="button" class="btn btn-danger">あきらめる</button>
-                </div>
-            </div>
-        </div>
 
-        <!--
+            <!--
                 <p class="lead">2016.05.14 hh:mm まで受注可能</p>
                 <div class="panel panel-info">
                     <div class="panel-heading">
@@ -159,75 +161,75 @@
                     </div>
                 </div>
                 -->
-            </section>
-        </div>
+        </section>
+    </div>
 
-        <script src="javascripts/bower.js"></script>
-        <script src="javascripts/all.js"></script>
-        <script src="javascripts/swagger.js"></script>
+    <script src="javascripts/bower.js"></script>
+    <script src="javascripts/all.js"></script>
+    <script src="javascripts/swagger.js"></script>
 
-        <script>
-            var token = loadHomeQuestToken();
-            if (!token) {
-                redirect('signin.html');
-            }
-            var api = HomeQuest_API(token);
+    <script>
+        var token = loadHomeQuestToken();
+        if (!token) {
+            redirect('signin.html');
+        }
+        var api = HomeQuest_API(token);
 
-            var questList = new Vue({
-                el: '#quest-list',
+        var questList = new Vue({
+            el: '#quest-list',
 
-                data: {
-                    tasks: null,
-                    status: null,
-                    message: null
+            data: {
+                tasks: null,
+                status: null,
+                message: null
+            },
+
+            filters: {
+                int2star: function(i) {
+                    return int2star(i);
                 },
-
-                filters: {
-                    int2star: function (i) {
-                        return int2star(i);
-                    },
-                    epoch2str: function (i) {
-                        return epoch2str(i);
-                    }
-                },
-
-                created: function () {
-                    this.retrieveStatus();
-                    this.retrieveQuest();
-                },
-
-                methods: {
-
-                    retrieveStatus: function () {
-                        var self = this;
-
-                        api.statusGet(function (error, data, response) {
-                            if (!error) {
-                                self.status = data;
-                            } else {
-                                self.message = error;
-                                console.log(data);
-                                console.log(response);
-                            }
-                        });
-                    },
-
-                    retrieveQuest: function () {
-                        var self = this;
-
-                        api.taskGet(function (error, data, response) {
-                            if (!error) {
-                                self.tasks = data;
-                            } else {
-                                self.message = error;
-                                console.log(data);
-                                console.log(response);
-                            }
-                        });
-                    }
+                epoch2str: function(i) {
+                    return epoch2str(i);
                 }
-            })
-        </script>
-        </body>
+            },
 
-        </html>
+            created: function() {
+                this.retrieveStatus();
+                this.retrieveQuest();
+            },
+
+            methods: {
+
+                retrieveStatus: function() {
+                    var self = this;
+
+                    api.statusGet(function(error, data, response) {
+                        if (!error) {
+                            self.status = data;
+                        } else {
+                            self.message = error;
+                            console.log(data);
+                            console.log(response);
+                        }
+                    });
+                },
+
+                retrieveQuest: function() {
+                    var self = this;
+
+                    api.taskGet(function(error, data, response) {
+                        if (!error) {
+                            self.tasks = data;
+                        } else {
+                            self.message = error;
+                            console.log(data);
+                            console.log(response);
+                        }
+                    });
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
