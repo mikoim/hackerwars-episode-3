@@ -1,18 +1,18 @@
 (function(root, factory) {
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
-    define(['../ApiClient', '../model/Error', '../model/Child', '../model/NewChild', '../model/Notification', '../model/NewSignin', '../model/Signin', '../model/Signup', '../model/Status', '../model/Task', '../model/NewTask', '../model/UpdateTaskState'], factory);
+    define(['../ApiClient', '../model/Error', '../model/Child', '../model/NewChild', '../model/Notification', '../model/Reward', '../model/NewReward', '../model/NewSignin', '../model/Signin', '../model/Signup', '../model/Status', '../model/Task', '../model/NewTask', '../model/UpdateTaskState'], factory);
   } else if (typeof module === 'object' && module.exports) {
     // CommonJS-like environments that support module.exports, like Node.
-    module.exports = factory(require('../ApiClient'), require('../model/Error'), require('../model/Child'), require('../model/NewChild'), require('../model/Notification'), require('../model/NewSignin'), require('../model/Signin'), require('../model/Signup'), require('../model/Status'), require('../model/Task'), require('../model/NewTask'), require('../model/UpdateTaskState'));
+    module.exports = factory(require('../ApiClient'), require('../model/Error'), require('../model/Child'), require('../model/NewChild'), require('../model/Notification'), require('../model/Reward'), require('../model/NewReward'), require('../model/NewSignin'), require('../model/Signin'), require('../model/Signup'), require('../model/Status'), require('../model/Task'), require('../model/NewTask'), require('../model/UpdateTaskState'));
   } else {
     // Browser globals (root is window)
     if (!root.HomeQuest) {
       root.HomeQuest = {};
     }
-    root.HomeQuest.DefaultApi = factory(root.HomeQuest.ApiClient, root.HomeQuest.Error, root.HomeQuest.Child, root.HomeQuest.NewChild, root.HomeQuest.Notification, root.HomeQuest.NewSignin, root.HomeQuest.Signin, root.HomeQuest.Signup, root.HomeQuest.Status, root.HomeQuest.Task, root.HomeQuest.NewTask, root.HomeQuest.UpdateTaskState);
+    root.HomeQuest.DefaultApi = factory(root.HomeQuest.ApiClient, root.HomeQuest.Error, root.HomeQuest.Child, root.HomeQuest.NewChild, root.HomeQuest.Notification, root.HomeQuest.Reward, root.HomeQuest.NewReward, root.HomeQuest.NewSignin, root.HomeQuest.Signin, root.HomeQuest.Signup, root.HomeQuest.Status, root.HomeQuest.Task, root.HomeQuest.NewTask, root.HomeQuest.UpdateTaskState);
   }
-}(this, function(ApiClient, Error, Child, NewChild, Notification, NewSignin, Signin, Signup, Status, Task, NewTask, UpdateTaskState) {
+}(this, function(ApiClient, Error, Child, NewChild, Notification, Reward, NewReward, NewSignin, Signin, Signup, Status, Task, NewTask, UpdateTaskState) {
   'use strict';
 
   /**
@@ -191,6 +191,132 @@
 
       return this.apiClient.callApi(
         '/notification', 'GET',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, callback
+      );
+    }
+
+    /**
+     * Callback function to receive the result of the rewardGet operation.
+     * @callback module:api/DefaultApi~rewardGetCallback
+     * @param {String} error Error message, if any.
+     * @param {Array.<module:model/Reward>} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
+
+    /**
+     * Get array of Reward
+     * @param {module:api/DefaultApi~rewardGetCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {Array.<module:model/Reward>}
+     */
+    this.rewardGet = function(callback) {
+      var postBody = null;
+
+
+      var pathParams = {
+      };
+      var queryParams = {
+      };
+      var headerParams = {
+      };
+      var formParams = {
+      };
+
+      var authNames = ['api_key'];
+      var contentTypes = [];
+      var accepts = ['application/json'];
+      var returnType = [Reward];
+
+      return this.apiClient.callApi(
+        '/reward', 'GET',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, callback
+      );
+    }
+
+    /**
+     * Callback function to receive the result of the rewardPost operation.
+     * @callback module:api/DefaultApi~rewardPostCallback
+     * @param {String} error Error message, if any.
+     * @param {module:model/Reward} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
+
+    /**
+     * Create reward
+     * @param {module:model/NewReward} body 
+     * @param {module:api/DefaultApi~rewardPostCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {module:model/Reward}
+     */
+    this.rewardPost = function(body, callback) {
+      var postBody = body;
+
+      // verify the required parameter 'body' is set
+      if (body == undefined || body == null) {
+        throw "Missing the required parameter 'body' when calling rewardPost";
+      }
+
+
+      var pathParams = {
+      };
+      var queryParams = {
+      };
+      var headerParams = {
+      };
+      var formParams = {
+      };
+
+      var authNames = ['api_key'];
+      var contentTypes = [];
+      var accepts = ['application/json'];
+      var returnType = Reward;
+
+      return this.apiClient.callApi(
+        '/reward', 'POST',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, callback
+      );
+    }
+
+    /**
+     * Callback function to receive the result of the rewardRewardUuidGet operation.
+     * @callback module:api/DefaultApi~rewardRewardUuidGetCallback
+     * @param {String} error Error message, if any.
+     * @param data This operation does not return a value.
+     * @param {String} response The complete HTTP response.
+     */
+
+    /**
+     * Earn Reward
+     * @param {String} rewardUuid UUID of Reward
+     * @param {module:api/DefaultApi~rewardRewardUuidGetCallback} callback The callback function, accepting three arguments: error, data, response
+     */
+    this.rewardRewardUuidGet = function(rewardUuid, callback) {
+      var postBody = null;
+
+      // verify the required parameter 'rewardUuid' is set
+      if (rewardUuid == undefined || rewardUuid == null) {
+        throw "Missing the required parameter 'rewardUuid' when calling rewardRewardUuidGet";
+      }
+
+
+      var pathParams = {
+        'reward_uuid': rewardUuid
+      };
+      var queryParams = {
+      };
+      var headerParams = {
+      };
+      var formParams = {
+      };
+
+      var authNames = ['api_key'];
+      var contentTypes = [];
+      var accepts = ['application/json'];
+      var returnType = null;
+
+      return this.apiClient.callApi(
+        '/reward/{reward_uuid}', 'GET',
         pathParams, queryParams, headerParams, formParams, postBody,
         authNames, contentTypes, accepts, returnType, callback
       );

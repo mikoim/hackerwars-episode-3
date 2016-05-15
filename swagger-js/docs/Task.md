@@ -3,6 +3,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**uuid** | **String** | UUID of Task | 
 **title** | **String** | Quest name | 
 **applicationDeadline** | **Integer** | Deadline of application | 
 **completionDeadline** | **Integer** | Deadline of completion | 
