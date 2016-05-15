@@ -25,6 +25,7 @@
    * Constructs a new <code>Task</code>.
    * @alias module:model/Task
    * @class
+   * @param uuid
    * @param title
    * @param applicationDeadline
    * @param completionDeadline
@@ -34,8 +35,9 @@
    * @param isAccept
    * @param acceptedChild
    */
-  var exports = function(title, applicationDeadline, completionDeadline, point, difficulty, description, isAccept, acceptedChild) {
+  var exports = function(uuid, title, applicationDeadline, completionDeadline, point, difficulty, description, isAccept, acceptedChild) {
 
+    this['uuid'] = uuid;
     this['title'] = title;
     this['application_deadline'] = applicationDeadline;
     this['completion_deadline'] = completionDeadline;
@@ -57,6 +59,9 @@
     if (data) { 
       obj = obj || new exports();
 
+      if (data.hasOwnProperty('uuid')) {
+        obj['uuid'] = ApiClient.convertToType(data['uuid'], 'String');
+      }
       if (data.hasOwnProperty('title')) {
         obj['title'] = ApiClient.convertToType(data['title'], 'String');
       }
@@ -85,6 +90,12 @@
     return obj;
   }
 
+
+  /**
+   * UUID of Task
+   * @member {String} uuid
+   */
+  exports.prototype['uuid'] = undefined;
 
   /**
    * Quest name

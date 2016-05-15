@@ -8,6 +8,9 @@ Method | HTTP request | Description
 [**childGet**](DefaultApi.md#childGet) | **GET** /child | Get array of Child
 [**childPost**](DefaultApi.md#childPost) | **POST** /child | Create Child
 [**notificationGet**](DefaultApi.md#notificationGet) | **GET** /notification | Get array of Notification
+[**rewardGet**](DefaultApi.md#rewardGet) | **GET** /reward | Get array of Reward
+[**rewardPost**](DefaultApi.md#rewardPost) | **POST** /reward | Create reward
+[**rewardRewardUuidGet**](DefaultApi.md#rewardRewardUuidGet) | **GET** /reward/{reward_uuid} | Earn Reward
 [**signinPost**](DefaultApi.md#signinPost) | **POST** /signin | Login
 [**signupPost**](DefaultApi.md#signupPost) | **POST** /signup | Register family account
 [**statusGet**](DefaultApi.md#statusGet) | **GET** /status | Get Status
@@ -200,6 +203,153 @@ This endpoint does not need any parameter.
 ### Return type
 
 [**[Notification]**](Notification.md)
+
+### Authorization
+
+[api_key](../README.md#api_key)
+
+### HTTP reuqest headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+<a name="rewardGet"></a>
+# **rewardGet**
+> [Reward] rewardGet
+
+Get array of Reward
+
+### Example
+```javascript
+var HomeQuest = require('home-quest');
+var defaultClient = HomeQuest.ApiClient.default;
+
+// Configure API key authorization: api_key
+var api_key = defaultClient.authentications['api_key'];
+api_key.apiKey = "YOUR API KEY"
+// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+//api_key.apiKeyPrefix['homequest_token'] = "Token"
+
+var apiInstance = new HomeQuest.DefaultApi()
+
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+api.rewardGet(callback);
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**[Reward]**](Reward.md)
+
+### Authorization
+
+[api_key](../README.md#api_key)
+
+### HTTP reuqest headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+<a name="rewardPost"></a>
+# **rewardPost**
+> Reward rewardPost(body)
+
+Create reward
+
+### Example
+```javascript
+var HomeQuest = require('home-quest');
+var defaultClient = HomeQuest.ApiClient.default;
+
+// Configure API key authorization: api_key
+var api_key = defaultClient.authentications['api_key'];
+api_key.apiKey = "YOUR API KEY"
+// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+//api_key.apiKeyPrefix['homequest_token'] = "Token"
+
+var apiInstance = new HomeQuest.DefaultApi()
+
+var body = new HomeQuest.NewReward(); // {NewReward} 
+
+
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+api.rewardPost(body, callback);
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**NewReward**](NewReward.md)|  | 
+
+### Return type
+
+[**Reward**](Reward.md)
+
+### Authorization
+
+[api_key](../README.md#api_key)
+
+### HTTP reuqest headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+<a name="rewardRewardUuidGet"></a>
+# **rewardRewardUuidGet**
+> rewardRewardUuidGet(rewardUuid)
+
+Earn Reward
+
+### Example
+```javascript
+var HomeQuest = require('home-quest');
+var defaultClient = HomeQuest.ApiClient.default;
+
+// Configure API key authorization: api_key
+var api_key = defaultClient.authentications['api_key'];
+api_key.apiKey = "YOUR API KEY"
+// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+//api_key.apiKeyPrefix['homequest_token'] = "Token"
+
+var apiInstance = new HomeQuest.DefaultApi()
+
+var rewardUuid = "rewardUuid_example"; // {String} UUID of Reward
+
+
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully.');
+  }
+};
+api.rewardRewardUuidGet(rewardUuid, callback);
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **rewardUuid** | **String**| UUID of Reward | 
+
+### Return type
+
+null (empty response body)
 
 ### Authorization
 

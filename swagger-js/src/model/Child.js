@@ -25,12 +25,14 @@
    * Constructs a new <code>Child</code>.
    * @alias module:model/Child
    * @class
+   * @param uuid
    * @param givenName
    * @param familyName
    * @param loginToken
    */
-  var exports = function(givenName, familyName, loginToken) {
+  var exports = function(uuid, givenName, familyName, loginToken) {
 
+    this['uuid'] = uuid;
     this['given_name'] = givenName;
     this['family_name'] = familyName;
     this['login_token'] = loginToken;
@@ -47,6 +49,9 @@
     if (data) { 
       obj = obj || new exports();
 
+      if (data.hasOwnProperty('uuid')) {
+        obj['uuid'] = ApiClient.convertToType(data['uuid'], 'String');
+      }
       if (data.hasOwnProperty('given_name')) {
         obj['given_name'] = ApiClient.convertToType(data['given_name'], 'String');
       }
@@ -60,6 +65,12 @@
     return obj;
   }
 
+
+  /**
+   * UUID of Child
+   * @member {String} uuid
+   */
+  exports.prototype['uuid'] = undefined;
 
   /**
    * Given name
