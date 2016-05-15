@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>HomeQuest: Home</title>
+    <title>HomeQuest: Quest List</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -43,14 +43,14 @@
     </nav>
 
     <div class="container" id="list-body">
-        <section id="done-quest-alerts">
-            <!-- http://getbootstrap.com/components/#alerts-dismissible -->
-            <div id="done-quest-alert" class="alert alert-success alert-dismissible" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <strong>「○○をせよ！」</strong>のクエストクリアが認定されたぞ！
-            </div>
-        </section>
-
+        <!--
+    <section id="done-quest-alerts">
+        <div id="done-quest-alert" class="alert alert-success alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <strong>「○○をせよ！」</strong>のクエストクリアが認定されたぞ！
+        </div>
+    </section>
+    -->
         <section id="quest-list">
             <div class="page-header">
                 <h1>○○家のクエストリスト</h1>
@@ -61,77 +61,106 @@
                 <div class="col-xs-8 col-sm-4">
                     <div class="thumbnail">
                         <div class="caption">
-                            <h4>しゅんくんのステータス</h4>
+                            <h4>{{ status.given_name }}のステータス</h4>
                             <ul>
-                                <li>完了クエスト数：　5</li>
-                                <li>現在のポイント： 1,000 pt</li>
-                                <li>ハイパーお手伝いさん</li>
+                                <!-- <li>完了クエスト数：　5</li> -->
+                                <li>現在のポイント： {{ status.point }} pt</li>
+                                <li>{{ message }}</li>
                             </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12">
+                    <div v-for="t in tasks">
+                        <p class="lead">{{ t.application_deadline | epoch2str }} まで受注可能</p>
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                {{ t.completion_deadline | epoch2str }} / むずかしさ： {{ t.difficulty | int2star }} / 報酬：なし
+                            </div>
+                            <div class="panel-body">
+                                <p class="quest-title text-center">
+                                    {{ t.title }}
+                                </p>
+                            </div>
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    <pre class="quest-detail">
+                                        {{ t.description }}
+                                    </pre>
+                                </li>
+                            </ul>
+                            <div class="panel-footer-info text-right">
+                                <button type="button" class="btn btn-primary">おわった</button>
+                                <button type="button" class="btn btn-danger">あきらめる</button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <p class="lead">2016.05.14 hh:mm まで受注可能</p>
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    2016.05.15 / むずかしさ： ★★★☆☆ / 報酬：なし
-                </div>
-                <div class="panel-body">
-                    <p class="quest-title text-center">
-                        クエストリスト（親）ページを実装せよ！！
-                    </p>
-                </div>
-                <ul class="list-group">
-                    <li class="list-group-item">
-                        <pre class="quest-detail">
-・上部にクエスト作成画面
-    ・申し込み締め切りの近い日順に並べる
-    ・各クエスト情報を無限ループ
-        ・タイトル
-        ・難しさ
-        ・報酬
-        ・詳細はウィンて伸びて出てくる
-    ・子供がクエストを進行中のタスクは青に
-    ・子供がクエストを完了申請すると緑に
-    ・子供がクエストを締切までに終わらなければ赤に
-                        </pre>
-                    </li>
-                </ul>
-                <div class="panel-footer-info text-right">
-                    <button type="button" class="btn btn-primary">おわった</button>
-                    <button type="button" class="btn btn-danger">あきらめる</button>
-                </div>
-            </div>
 
-            <p class="lead">2016.05.14 hh:mm まで受注可能</p>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    2016.05.15 / むずかしさ： ★★★☆☆ / 報酬：なし
+            <!--
+                <p class="lead">2016.05.14 hh:mm まで受注可能</p>
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        2016.05.15 / むずかしさ： ★★★☆☆ / 報酬：なし
+                    </div>
+                    <div class="panel-body">
+                        <p class="quest-title text-center">
+                            クエストリスト（親）ページを実装せよ！！
+                        </p>
+                    </div>
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                                <pre class="quest-detail">
+        ・上部にクエスト作成画面
+            ・申し込み締め切りの近い日順に並べる
+            ・各クエスト情報を無限ループ
+                ・タイトル
+                ・難しさ
+                ・報酬
+                ・詳細はウィンて伸びて出てくる
+            ・子供がクエストを進行中のタスクは青に
+            ・子供がクエストを完了申請すると緑に
+            ・子供がクエストを締切までに終わらなければ赤に
+                                </pre>
+                        </li>
+                    </ul>
+                    <div class="panel-footer-info text-right">
+                        <button type="button" class="btn btn-primary">おわった</button>
+                        <button type="button" class="btn btn-danger">あきらめる</button>
+                    </div>
                 </div>
-                <div class="panel-body quest-title text-center">
-                    クエストリスト（子）ページを実装せよ！！
-                </div>
-                <div class="panel-footer text-right">
-                    <button type="button" class="btn btn-primary">挑戦する</button>
-                    <button type="button" class="btn btn-danger">やめとく</button>
-                </div>
-            </div>
 
-            <p class="lead">2016.05.15 hh:mm まで受注可能</p>
-            <div class="panel panel-success">
-                <div class="panel-heading">
-                    2016.05.15 / むずかしさ： ★★★☆☆ / 報酬：なし
+                <p class="lead">2016.05.14 hh:mm まで受注可能</p>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        2016.05.15 / むずかしさ： ★★★☆☆ / 報酬：なし
+                    </div>
+                    <div class="panel-body quest-title text-center">
+                        クエストリスト（子）ページを実装せよ！！
+                    </div>
+                    <div class="panel-footer text-right">
+                        <button type="button" class="btn btn-primary">挑戦する</button>
+                        <button type="button" class="btn btn-danger">やめとく</button>
+                    </div>
                 </div>
-                <div class="panel-body quest-title text-center">
-                    クエスト作成ページを実装せよ！！
+
+                <p class="lead">2016.05.15 hh:mm まで受注可能</p>
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        2016.05.15 / むずかしさ： ★★★☆☆ / 報酬：なし
+                    </div>
+                    <div class="panel-body quest-title text-center">
+                        クエスト作成ページを実装せよ！！
+                    </div>
+                    <div class="panel-footer-success text-right">
+                        <p>
+                            認可待ちです
+                        </p>
+                    </div>
                 </div>
-                <div class="panel-footer-success text-right">
-                    <p>
-                        認可待ちです
-                    </p>
-                </div>
-            </div>
+                -->
         </section>
     </div>
 
@@ -140,6 +169,66 @@
     <script src="javascripts/swagger.js"></script>
 
     <script>
+        var token = loadHomeQuestToken();
+        if (!token) {
+            redirect('signin.html');
+        }
+        var api = HomeQuest_API(token);
+
+        var questList = new Vue({
+            el: '#quest-list',
+
+            data: {
+                tasks: null,
+                status: null,
+                message: null
+            },
+
+            filters: {
+                int2star: function(i) {
+                    return int2star(i);
+                },
+                epoch2str: function(i) {
+                    return epoch2str(i);
+                }
+            },
+
+            created: function() {
+                this.retrieveStatus();
+                this.retrieveQuest();
+            },
+
+            methods: {
+
+                retrieveStatus: function() {
+                    var self = this;
+
+                    api.statusGet(function(error, data, response) {
+                        if (!error) {
+                            self.status = data;
+                        } else {
+                            self.message = error;
+                            console.log(data);
+                            console.log(response);
+                        }
+                    });
+                },
+
+                retrieveQuest: function() {
+                    var self = this;
+
+                    api.taskGet(function(error, data, response) {
+                        if (!error) {
+                            self.tasks = data;
+                        } else {
+                            self.message = error;
+                            console.log(data);
+                            console.log(response);
+                        }
+                    });
+                }
+            }
+        })
     </script>
 </body>
 

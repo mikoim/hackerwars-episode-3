@@ -52,7 +52,8 @@ gulp.task('bower', function () {
         'bower_components/jquery/dist/jquery.min.js',
         'bower_components/bootstrap-sass/assets/javascripts/bootstrap.min.js',
         'bower_components/vue/dist/vue.min.js',
-        'bower_components/vue-router/dist/vue-router.min.js'
+        'bower_components/vue-router/dist/vue-router.min.js',
+        'bower_components/vue-validator/dist/vue-validator.min.js'
     ];
     return gulp.src(bower_files)
         .pipe(concat('bower.js'))
