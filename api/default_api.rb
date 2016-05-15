@@ -3,10 +3,10 @@ require 'securerandom'
 
 @@homequest_tokens = Hash.new
 
-def search_for_child(parents, uuid)
+def search_for_child(parents, key, value)
   parents.each do |parent|
     parent.children.find do |child|
-      child[:uuid] = uuid
+      child[key] = value
     end
   end
 end
@@ -94,7 +94,6 @@ HomeQuest.add_route('POST', '/v1/child', {
     ]}) do
   cross_origin
   # the guts live here
-  puts request.env
   parent_uuid = @@homequest_tokens[request.env['HTTP_HOMEQUEST_TOKEN']]
   uuid = SecureRandom.uuid
   @client[:parent].find(:uuid => parent_uuid).each do |doc|
@@ -107,7 +106,7 @@ HomeQuest.add_route('POST', '/v1/child', {
              family_name: @family_name,
              is_admin: false
   }
-  @child.store(:login_id, SecureRandom.hex)
+  @child.store(:login_token, SecureRandom.hex)
   #store @child in datebase
   matches = @client[:parent].find(:uuid => parent_uuid)
   matches.limit(1).each do |doc|
@@ -166,9 +165,7 @@ HomeQuest.add_route('POST', '/v1/signin', {
   # the guts live here
   @signin = JSON.parse request.body.read
   if login_token = @signin["login_token"] then
-    @client[:child].find(:login_token => login_token).each do |doc|
-      @child = doc
-    end
+    @child = search_for_child(@client[:parent].find, :login_token, login_token)
     @@homequest_tokens.store(SecureRandom.hex, @child[:uuid])
     return {:homequest_token => @@homequest_tokens[@child[:uuid]]}
   elsif @signin["email"] then
@@ -424,10 +421,10 @@ HomeQuest.add_route('GET', '/v1/reward', {
   # the guts live here
   @rewards = Array.new
   @client[:reward].find.each do |doc|
-    @reward << doc
+    @rewards << doc
   end
 
-  rewards.to_json
+  @rewards.to_json
 end
 
 
@@ -484,7 +481,7 @@ HomeQuest.add_route('GET', '/v1/reward/{reward_uuid}', {
   cross_origin
   # the guts live here
   user_uuid = @@homequest_tokens[request.env['HTTP_HOMEQUEST_TOKEN']]
-  unless @user = search_for_child(@client[:parents].find, user_uuid) then
+  unless @user = search_for_child(@client[:parents].find, :uuid, user_uuid) then
     return { message: "ユーザーは見つかりませんでした。" }.to_json
   end
   @client[:reward].find(:uuid => params[:uuid]).each do |doc|
