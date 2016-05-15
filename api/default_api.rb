@@ -45,7 +45,7 @@ HomeQuest.add_route('GET', '/v1/child', {
     ]}) do
   cross_origin
   # the guts live here
-  parent_uuid = @@homequest_tokens[headers['homequest_token']]
+  parent_uuid = @@homequest_tokens[request.env['HTTP_HOMEQUEST_TOKEN']]
   @client[:parent].find(parent_uuid).limit(1).each do |doc|
     @parent = doc
   end
@@ -75,8 +75,8 @@ HomeQuest.add_route('POST', '/v1/child', {
     ]}) do
   cross_origin
   # the guts live here
-  puts headers['homequest_token']
-  parent_uuid = @@homequest_tokens[headers['homequest_token']]
+  puts request.env
+  parent_uuid = @@homequest_tokens[request.env['HTTP_HOMEQUEST_TOKEN']]
   uuid = SecureRandom.uuid
   @client[:parent].find(:uuid => parent_uuid).each do |doc|
     @family_name = doc[:family_name] if parent_uuid
