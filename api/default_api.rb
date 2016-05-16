@@ -221,18 +221,32 @@ HomeQuest.add_route('GET', '/v1/status', {
     "parameters" => [
     ]}) do
   cross_origin
-  # the guts live here
-  user_uuid = @@homequest_tokens[request.env['HTTP_HOMEQUEST_TOKEN']]
-  puts user_uuid
-  matches = settings.db[:parent].find(:uuid => user_uuid)
-  if matches.count != 0 then
-    matches.each do |doc|
-      @user = doc
-    end
-    return {"family_name": @user[:family_name], "given_name": @user[:given_name], "point": 0, "is_admin": true, "user_uuid": user_uuid}.to_json
+
+  user_uuid = @homequest_tokens[request.env['HTTP_HOMEQUEST_TOKEN']]
+
+  if user_uuid.nil?
+    status 401
+    return message 'ユーザーの状態を取得するにはログインする必要があります'
+  end
+
+  parent = search_parent('uuid', user_uuid)
+  child = search_child('uuid', user_uuid)
+
+  if parent
+    return json({'family_name': parent['family_name'],
+                 'given_name': parent['given_name'],
+                 'point': 0,
+                 'is_admin': true,
+                 'user_uuid': parent['uuid']})
+  elsif child
+    return json({'family_name': child[:family_name],
+                 'given_name': child[:given_name],
+                 'point': child[:point],
+                 'is_admin': false,
+                 'user_uuid': user_uuid})
   else
-    @user = search_for_child(settings.db[:parents].find, :uuid, user_uuid)
-    return {"family_name": @user[:family_name], "given_name": @user[:given_name], "point": @user[:point], "is_admin": false, "user_uuid": user_uuid}.to_json
+    status 500
+    return message 'ユーザーは見つかりませんでした'
   end
 end
 
