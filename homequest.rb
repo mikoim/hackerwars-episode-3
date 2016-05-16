@@ -19,6 +19,14 @@ class HomeQuest < Swaggering
   end
 
   set :public_folder, File.dirname(__FILE__) + '/public'
+
+  get '/swagger-ui/*' do |path|
+    if path.empty?
+      path = 'index.html'
+    end
+
+    send_file(File.join('swagger-ui/dist/', path))
+  end
 end
 
 # include the api files
