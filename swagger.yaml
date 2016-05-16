@@ -172,8 +172,6 @@ paths:
           description: "Standard error"
           schema:
             $ref: "#/definitions/Error"
-      security:
-      - api_key: []
   /status:
     get:
       summary: "Get Status"
