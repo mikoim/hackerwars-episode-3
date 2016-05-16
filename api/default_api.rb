@@ -110,17 +110,20 @@ HomeQuest.add_route('GET', '/v1/notification', {
     "parameters" => [
     ]}) do
   cross_origin
-  # the guts live here
 
-  @notifi = Array.new
-  child_uuid = params[:child_uuid]
-  settings.db[:notification].find(:child_uuid => child_uuid).each do |node|
-    @notifi << node.to_json
-    node.delete_one
+  user_uuid = @homequest_tokens[headers['homequest_token']]
+
+  if user_uuid.nil?
+    status 401
+    return message '通知を取得するにはログインする必要があります'
   end
 
-  return @notifi.to_json
+  notifications = settings.db['notification'].find('user_uuid' => user_uuid)
+  notified = notifications.to_a
 
+  notifications.delete_many
+
+  return json notified
 end
 
 HomeQuest.add_route('POST', '/v1/signin', {
