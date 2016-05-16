@@ -36,7 +36,8 @@ HomeQuest.add_route('DELETE', '/v1/child/{child_uuid}', {
       return nil
     end
   else
-    {"message" => "you is not admin"}.to_json
+    status 401
+    return message '管理者権限が必要です'
   end
 
 
@@ -193,7 +194,7 @@ HomeQuest.add_route('POST', '/v1/signup', {
     settings.db[:parent].insert_one(parent)
   rescue Mongo::Error::OperationFailure
     status 500
-    return json :message => 'データベースでエラーが発生しました．'
+    return message 'データベースでエラーが発生しました'
   end
 
   return nil
@@ -442,7 +443,8 @@ HomeQuest.add_route('GET', '/v1/reward/{reward_uuid}', {
   # the guts live here
   user_uuid = @@homequest_tokens[request.env['HTTP_HOMEQUEST_TOKEN']]
   unless @user = search_for_child(settings.db[:parents].find, :uuid, user_uuid) then
-    return {message: "ユーザーは見つかりませんでした。"}.to_json
+    status 500
+    return message 'ユーザーは見つかりませんでした'
   end
   settings.db[:reward].find(:uuid => params[:uuid]).each do |doc|
     @reward = doc

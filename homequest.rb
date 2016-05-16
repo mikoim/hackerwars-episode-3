@@ -1,5 +1,6 @@
 require './lib/swaggering'
 require 'mongo'
+require 'sinatra/contrib'
 require 'sinatra/reloader'
 require 'better_errors'
 
@@ -17,6 +18,11 @@ class HomeQuest < Swaggering
 
     set :db, Mongo::Client.new(['localhost:27017'], :database => 'homequest')
     settings.db[:parent].indexes.create_one({ :email => 1 }, :unique => true)
+  end
+  helpers do
+    def message(text)
+      json :message => text
+    end
   end
 
   set :public_folder, File.dirname(__FILE__) + '/public'
