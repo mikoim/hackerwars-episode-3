@@ -11,6 +11,8 @@ schemes:
 - "http"
 produces:
 - "application/json"
+consumes:
+- "application/json"
 paths:
   /child:
     get:
