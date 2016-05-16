@@ -22,8 +22,9 @@ class HomeQuest < Swaggering
     BetterErrors.application_root = settings.root
 
     set :db, Mongo::Client.new(['localhost:27017'], :database => 'homequest')
-    settings.db[:parent].indexes.create_one({ :email => 1 }, :unique => true)
+    settings.db['parent'].indexes.create_one({:email => 1}, :unique => true)
   end
+
   helpers do
     def search_children(key, value)
       parents = settings.db['parent'].find({"children.#{key}" => value}).to_a
@@ -61,6 +62,7 @@ class HomeQuest < Swaggering
     def message(text)
       json :message => text
     end
+
   end
 
   set :public_folder, File.dirname(__FILE__) + '/public'

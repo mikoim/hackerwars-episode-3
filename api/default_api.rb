@@ -27,9 +27,9 @@ HomeQuest.add_route('DELETE', '/v1/child/{child_uuid}', {
     ]}) do
   cross_origin
   # the guts live here
-  uuid = @@homequest_tokens[headers['homequest_token']] if @@homequest_tokens[headers['homequest_token']]
+  user_uuid = @@homequest_tokens[request.env['HTTP_HOMEQUEST_TOKEN']] if @@homequest_tokens[headers['homequest_token']]
 
-  if uuid["is_admin"] then
+  if user_uuid["is_admin"]
     settings.db[:parent].find(prams[:child_uuid]).limit(1).each do |mortal_child|
       mortal.child.delete_one
       return nil
@@ -38,10 +38,7 @@ HomeQuest.add_route('DELETE', '/v1/child/{child_uuid}', {
     status 401
     return message '管理者権限が必要です'
   end
-
-
 end
-
 
 HomeQuest.add_route('GET', '/v1/child', {
     "resourcePath" => "/Default",
@@ -58,9 +55,8 @@ HomeQuest.add_route('GET', '/v1/child', {
   settings.db[:parent].find(:uuid => parent_uuid).limit(1).each do |doc|
     @parent = doc
   end
-  @parent[:children].to_json
+  json @parent[:children]
 end
-
 
 HomeQuest.add_route('POST', '/v1/child', {
     "resourcePath" => "/Default",
@@ -104,7 +100,6 @@ HomeQuest.add_route('POST', '/v1/child', {
   @child.to_json
 end
 
-
 HomeQuest.add_route('GET', '/v1/notification', {
     "resourcePath" => "/Default",
     "summary" => "Get array of Notification",
@@ -118,7 +113,6 @@ HomeQuest.add_route('GET', '/v1/notification', {
   # the guts live here
 
   @notifi = Array.new
-  content_type :json
   child_uuid = params[:child_uuid]
   settings.db[:notification].find(:child_uuid => child_uuid).each do |node|
     @notifi << node.to_json
@@ -239,7 +233,6 @@ HomeQuest.add_route('GET', '/v1/status', {
   end
 end
 
-
 HomeQuest.add_route('GET', '/v1/task', {
     "resourcePath" => "/Default",
     "summary" => "Get array of Task",
@@ -251,7 +244,6 @@ HomeQuest.add_route('GET', '/v1/task', {
     ]}) do
   cross_origin
   # the guts live here
-  content_type :json
 
   @task = []
   uuid = @@homequest_tokens[request.env['HTTP_HOMEQUEST_TOKEN']]
@@ -339,7 +331,6 @@ HomeQuest.add_route('GET', '/v1/task/{task_uuid}', {
   cross_origin
   # the guts live here
 
-  content_type :json
   settings.db[:task].find(:uuid => params[:task_uuid]).each do |tmp|
     @task = tmp
   end
@@ -372,7 +363,6 @@ HomeQuest.add_route('POST', '/v1/task/{task_uuid}', {
   # the guts live here
 
   @target_task = {}
-  content_type :json
   #一個だけほしかったけど、わからないのでこうなった
   settings.db[:task].find(:uuid => params[:task_uuid]).each do |tmp|
     @target_task = tmp
@@ -392,7 +382,6 @@ HomeQuest.add_route('POST', '/v1/task/{task_uuid}', {
 
 end
 
-
 HomeQuest.add_route('GET', '/v1/reward', {
     "resourcePath" => "/Default",
     "summary" => "Get array of Reward",
@@ -411,7 +400,6 @@ HomeQuest.add_route('GET', '/v1/reward', {
 
   @rewards.to_json
 end
-
 
 HomeQuest.add_route('POST', '/v1/reward', {
     "resourcePath" => "/Default",
@@ -436,7 +424,6 @@ HomeQuest.add_route('POST', '/v1/reward', {
   settings.db[:reward].insert_one(@reward)
   @reward.to_json
 end
-
 
 HomeQuest.add_route('GET', '/v1/reward/{reward_uuid}', {
     "resourcePath" => "/Default",
