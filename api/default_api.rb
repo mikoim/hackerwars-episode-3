@@ -1,7 +1,6 @@
 require 'json'
 require 'securerandom'
 
-@@homequest_tokens = Hash.new
 
 def search_for_child(parents, key, value)
   parents.each do |parent|
@@ -146,26 +145,41 @@ HomeQuest.add_route('POST', '/v1/signin', {
         }
     ]}) do
   cross_origin
-  # the guts live here
-  @signin = JSON.parse request.body.read
-  if login_token = @signin["login_token"] then
-    @child = search_for_child(settings.db[:parent].find, :login_token, login_token)
-    @@homequest_tokens.store(SecureRandom.hex, @child[:uuid])
-    return {:homequest_token => @@homequest_tokens[@child[:uuid]]}
-  elsif @signin["email"] then
-    settings.db[:parent].find(:email => @signin["email"]).limit(1).each do |doc|
-      @parent = doc
-    end
-    if @parent[:password] == @signin["password"] then
-      homequest_token = SecureRandom.hex
-      @@homequest_tokens.store(homequest_token, @parent[:uuid])
-      return {:homequest_token => homequest_token}.to_json
-    end
-  else
-    puts 'epic fail'
-  end
-end
+  # ToDo: implement validation
 
+  signin = JSON.parse request.body.read
+  homequest_token = SecureRandom.hex
+
+  begin
+    case
+      when signin['login_token'] # for Child
+        login_token = signin['login_token']
+        child = search_child('login_token', login_token)
+
+        if child.nil?
+          raise HomeQuest::Error::InvalidCredential
+        end
+
+        @homequest_tokens.store(homequest_token, child['uuid'])
+      when signin['email'] && signin['password'] # for Parent
+        parent = search_parent('email', signin['email'])
+
+        if parent.nil? || parent['password'] != signin['password']
+          raise HomeQuest::Error::InvalidCredential
+        end
+
+        @homequest_tokens.store(homequest_token, parent['uuid'])
+      else
+        raise HomeQuest::Error::InvalidCredential
+    end
+
+  rescue HomeQuest::Error::InvalidCredential
+    status 401
+    return message 'ログインに失敗しました'
+  end
+
+  return json :'homequest_token' => homequest_token
+end
 
 HomeQuest.add_route('POST', '/v1/signup', {
     "resourcePath" => "/Default",

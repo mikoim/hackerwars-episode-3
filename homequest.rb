@@ -6,6 +6,11 @@ require 'better_errors'
 
 # only need to extend if you want special configuration!
 class HomeQuest < Swaggering
+  def initialize
+    super()
+    @homequest_tokens = {}
+  end
+
   self.configure do |config|
     config.api_version = '0.0.2'
   end
@@ -20,6 +25,39 @@ class HomeQuest < Swaggering
     settings.db[:parent].indexes.create_one({ :email => 1 }, :unique => true)
   end
   helpers do
+    def search_children(key, value)
+      parents = settings.db['parent'].find({"children.#{key}" => value}).to_a
+
+      if parents.empty?
+        return []
+      end
+        return parents.map {|p| p['children']}.flatten.select {|v| v[key] == value}
+    end
+
+    def search_child(key, value)
+      children = search_children(key, value)
+
+      if children.length > 1
+        raise 'something went wrong'
+      end
+
+      return children.first
+    end
+
+    def search_parents(key, value)
+      return settings.db['parent'].find({key => value}).to_a
+    end
+
+    def search_parent(key, value)
+      parents = search_parents(key, value)
+
+      if parents.length > 1
+        raise 'something went wrong'
+      end
+
+      return parents.first
+    end
+
     def message(text)
       json :message => text
     end
@@ -33,6 +71,11 @@ class HomeQuest < Swaggering
     end
 
     send_file(File.join('swagger-ui/dist/', path))
+  end
+
+  class Error
+    class InvalidCredential < Exception
+    end
   end
 end
 
