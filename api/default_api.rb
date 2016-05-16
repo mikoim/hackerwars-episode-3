@@ -12,24 +12,19 @@ def search_for_child(parents, key, value)
 end
 
 HomeQuest.add_route('DELETE', '/v1/child/{child_uuid}', {
-  "resourcePath" => "/Default",
-  "summary" => "Delete Child",
-  "nickname" => "child_child_uuid_delete",
-  "responseClass" => "void",
-  "endpoint" => "/child/{child_uuid}",
-  "notes" => "",
-  "parameters" => [
-
-
-    {
-      "name" => "child_uuid",
-      "description" => "UUID of Child",
-      "dataType" => "string",
-      "paramType" => "path",
-    },
-
-
-
+    "resourcePath" => "/Default",
+    "summary" => "Delete Child",
+    "nickname" => "child_child_uuid_delete",
+    "responseClass" => "void",
+    "endpoint" => "/child/{child_uuid}",
+    "notes" => "",
+    "parameters" => [
+        {
+            "name" => "child_uuid",
+            "description" => "UUID of Child",
+            "dataType" => "string",
+            "paramType" => "path",
+        },
     ]}) do
   cross_origin
   # the guts live here
@@ -45,22 +40,17 @@ HomeQuest.add_route('DELETE', '/v1/child/{child_uuid}', {
   end
 
 
-
 end
 
 
 HomeQuest.add_route('GET', '/v1/child', {
-  "resourcePath" => "/Default",
-  "summary" => "Get array of Child",
-  "nickname" => "child_get",
-  "responseClass" => "array[Child]",
-  "endpoint" => "/child",
-  "notes" => "",
-  "parameters" => [
-
-
-
-
+    "resourcePath" => "/Default",
+    "summary" => "Get array of Child",
+    "nickname" => "child_get",
+    "responseClass" => "array[Child]",
+    "endpoint" => "/child",
+    "notes" => "",
+    "parameters" => [
     ]}) do
   cross_origin
   # the guts live here
@@ -73,24 +63,19 @@ end
 
 
 HomeQuest.add_route('POST', '/v1/child', {
-  "resourcePath" => "/Default",
-  "summary" => "Create Child",
-  "nickname" => "child_post",
-  "responseClass" => "Child",
-  "endpoint" => "/child",
-  "notes" => "",
-  "parameters" => [
-
-
-
-
-    {
-      "name" => "body",
-      "description" => "",
-      "dataType" => "NewChild",
-      "paramType" => "body",
-    }
-
+    "resourcePath" => "/Default",
+    "summary" => "Create Child",
+    "nickname" => "child_post",
+    "responseClass" => "Child",
+    "endpoint" => "/child",
+    "notes" => "",
+    "parameters" => [
+        {
+            "name" => "body",
+            "description" => "",
+            "dataType" => "NewChild",
+            "paramType" => "body",
+        }
     ]}) do
   cross_origin
   # the guts live here
@@ -101,11 +86,11 @@ HomeQuest.add_route('POST', '/v1/child', {
   end
 
 
-  @child = { given_name: JSON.parse(request.body.read)["given_name"],
-             parent_uuid: parent_uuid,
-             uuid: uuid,
-             family_name: @family_name,
-             is_admin: false
+  @child = {given_name: JSON.parse(request.body.read)["given_name"],
+            parent_uuid: parent_uuid,
+            uuid: uuid,
+            family_name: @family_name,
+            is_admin: false
   }
   @child.store(:login_token, SecureRandom.hex)
   #store @child in datebase
@@ -121,17 +106,13 @@ end
 
 
 HomeQuest.add_route('GET', '/v1/notification', {
-  "resourcePath" => "/Default",
-  "summary" => "Get array of Notification",
-  "nickname" => "notification_get",
-  "responseClass" => "array[Notification]",
-  "endpoint" => "/notification",
-  "notes" => "",
-  "parameters" => [
-
-
-
-
+    "resourcePath" => "/Default",
+    "summary" => "Get array of Notification",
+    "nickname" => "notification_get",
+    "responseClass" => "array[Notification]",
+    "endpoint" => "/notification",
+    "notes" => "",
+    "parameters" => [
     ]}) do
   cross_origin
   # the guts live here
@@ -149,18 +130,19 @@ HomeQuest.add_route('GET', '/v1/notification', {
 end
 
 HomeQuest.add_route('POST', '/v1/signin', {
-  "resourcePath" => "/Default",
-  "summary" => "Login",
-  "nickname" => "signin_post",
-  "responseClass" => "Signin",
-  "endpoint" => "/signin", "notes" => "",
-  "parameters" => [
-    {
-      "name" => "body",
-      "description" => "",
-      "dataType" => "NewSignin",
-      "paramType" => "body",
-    }
+    "resourcePath" => "/Default",
+    "summary" => "Login",
+    "nickname" => "signin_post",
+    "responseClass" => "Signin",
+    "endpoint" => "/signin",
+    "notes" => "",
+    "parameters" => [
+        {
+            "name" => "body",
+            "description" => "",
+            "dataType" => "NewSignin",
+            "paramType" => "body",
+        }
     ]}) do
   cross_origin
   # the guts live here
@@ -185,24 +167,19 @@ end
 
 
 HomeQuest.add_route('POST', '/v1/signup', {
-  "resourcePath" => "/Default",
-  "summary" => "Register family account",
-  "nickname" => "signup_post",
-  "responseClass" => "void",
-  "endpoint" => "/signup",
-  "notes" => "",
-  "parameters" => [
-
-
-
-
-    {
-      "name" => "body",
-      "description" => "Signup object",
-      "dataType" => "Signup",
-      "paramType" => "body",
-    }
-
+    "resourcePath" => "/Default",
+    "summary" => "Register family account",
+    "nickname" => "signup_post",
+    "responseClass" => "void",
+    "endpoint" => "/signup",
+    "notes" => "",
+    "parameters" => [
+        {
+            "name" => "body",
+            "description" => "Signup object",
+            "dataType" => "Signup",
+            "paramType" => "body",
+        }
     ]}) do
   cross_origin
   # the guts live here
@@ -218,17 +195,13 @@ HomeQuest.add_route('POST', '/v1/signup', {
 end
 
 HomeQuest.add_route('GET', '/v1/status', {
-  "resourcePath" => "/Default",
-  "summary" => "Get Status",
-  "nickname" => "status_get",
-  "responseClass" => "Status",
-  "endpoint" => "/status",
-  "notes" => "",
-  "parameters" => [
-
-
-
-
+    "resourcePath" => "/Default",
+    "summary" => "Get Status",
+    "nickname" => "status_get",
+    "responseClass" => "Status",
+    "endpoint" => "/status",
+    "notes" => "",
+    "parameters" => [
     ]}) do
   cross_origin
   # the guts live here
@@ -239,26 +212,22 @@ HomeQuest.add_route('GET', '/v1/status', {
     matches.each do |doc|
       @user = doc
     end
-    return { "family_name": @user[:family_name], "given_name": @user[:given_name], "point": 0, "is_admin": true, "user_uuid": user_uuid }.to_json
+    return {"family_name": @user[:family_name], "given_name": @user[:given_name], "point": 0, "is_admin": true, "user_uuid": user_uuid}.to_json
   else
     @user = search_for_child(settings.db[:parents].find, :uuid, user_uuid)
-    return { "family_name": @user[:family_name], "given_name": @user[:given_name], "point": @user[:point], "is_admin": false, "user_uuid": user_uuid }.to_json
+    return {"family_name": @user[:family_name], "given_name": @user[:given_name], "point": @user[:point], "is_admin": false, "user_uuid": user_uuid}.to_json
   end
 end
 
 
 HomeQuest.add_route('GET', '/v1/task', {
-  "resourcePath" => "/Default",
-  "summary" => "Get array of Task",
-  "nickname" => "task_get",
-  "responseClass" => "array[Task]",
-  "endpoint" => "/task",
-  "notes" => "",
-  "parameters" => [
-
-
-
-
+    "resourcePath" => "/Default",
+    "summary" => "Get array of Task",
+    "nickname" => "task_get",
+    "responseClass" => "array[Task]",
+    "endpoint" => "/task",
+    "notes" => "",
+    "parameters" => [
     ]}) do
   cross_origin
   # the guts live here
@@ -287,24 +256,19 @@ end
 
 # データベースに入れたうえで, 格納した時と同じ挙動
 HomeQuest.add_route('POST', '/v1/task', {
-  "resourcePath" => "/Default",
-  "summary" => "Create Task",
-  "nickname" => "task_post",
-  "responseClass" => "Task",
-  "endpoint" => "/task",
-  "notes" => "",
-  "parameters" => [
-
-
-
-
-    {
-      "name" => "body",
-      "description" => "",
-      "dataType" => "NewTask",
-      "paramType" => "body",
-    }
-
+    "resourcePath" => "/Default",
+    "summary" => "Create Task",
+    "nickname" => "task_post",
+    "responseClass" => "Task",
+    "endpoint" => "/task",
+    "notes" => "",
+    "parameters" => [
+        {
+            "name" => "body",
+            "description" => "",
+            "dataType" => "NewTask",
+            "paramType" => "body",
+        }
     ]}) do
   cross_origin
   # the guts live here
@@ -317,50 +281,40 @@ end
 
 # Return nothing
 HomeQuest.add_route('DELETE', '/v1/task/{task_uuid}', {
-  "resourcePath" => "/Default",
-  "summary" => "Delete Task",
-  "nickname" => "task_task_uuid_delete",
-  "responseClass" => "void",
-  "endpoint" => "/task/{task_uuid}",
-  "notes" => "",
-  "parameters" => [
-
-
-    {
-      "name" => "task_uuid",
-      "description" => "UUID of Task",
-      "dataType" => "string",
-      "paramType" => "path",
-    },
-
-
-
+    "resourcePath" => "/Default",
+    "summary" => "Delete Task",
+    "nickname" => "task_task_uuid_delete",
+    "responseClass" => "void",
+    "endpoint" => "/task/{task_uuid}",
+    "notes" => "",
+    "parameters" => [
+        {
+            "name" => "task_uuid",
+            "description" => "UUID of Task",
+            "dataType" => "string",
+            "paramType" => "path",
+        },
     ]}) do
   cross_origin
   # the guts live here
-    settings.db[:task].find(:uuid => params[:task_uuid]).delete_one
-    return nil
+  settings.db[:task].find(:uuid => params[:task_uuid]).delete_one
+  return nil
 end
 
 HomeQuest.add_route('GET', '/v1/task/{task_uuid}', {
-  "resourcePath" => "/Default",
-  "summary" => "Get Task",
-  "nickname" => "task_task_uuid_get",
-  "responseClass" => "Task",
-  "endpoint" => "/task/{task_uuid}",
-  "notes" => "",
-  "parameters" => [
-
-
-    {
-      "name" => "task_uuid",
-      "description" => "UUID of Task",
-      "dataType" => "string",
-      "paramType" => "path",
-    },
-
-
-
+    "resourcePath" => "/Default",
+    "summary" => "Get Task",
+    "nickname" => "task_task_uuid_get",
+    "responseClass" => "Task",
+    "endpoint" => "/task/{task_uuid}",
+    "notes" => "",
+    "parameters" => [
+        {
+            "name" => "task_uuid",
+            "description" => "UUID of Task",
+            "dataType" => "string",
+            "paramType" => "path",
+        },
     ]}) do
   cross_origin
   # the guts live here
@@ -374,31 +328,25 @@ HomeQuest.add_route('GET', '/v1/task/{task_uuid}', {
 end
 
 HomeQuest.add_route('POST', '/v1/task/{task_uuid}', {
-  "resourcePath" => "/Default",
-  "summary" => "Update status of Task",
-  "nickname" => "task_task_uuid_post",
-  "responseClass" => "Task",
-  "endpoint" => "/task/{task_uuid}",
-  "notes" => "",
-  "parameters" => [
-
-
-    {
-      "name" => "task_uuid",
-      "description" => "UUID of Task",
-      "dataType" => "string",
-      "paramType" => "path",
-    },
-
-
-
-    {
-      "name" => "body",
-      "description" => "updateTaskState object",
-      "dataType" => "UpdateTaskState",
-      "paramType" => "body",
-    }
-
+    "resourcePath" => "/Default",
+    "summary" => "Update status of Task",
+    "nickname" => "task_task_uuid_post",
+    "responseClass" => "Task",
+    "endpoint" => "/task/{task_uuid}",
+    "notes" => "",
+    "parameters" => [
+        {
+            "name" => "task_uuid",
+            "description" => "UUID of Task",
+            "dataType" => "string",
+            "paramType" => "path",
+        },
+        {
+            "name" => "body",
+            "description" => "updateTaskState object",
+            "dataType" => "UpdateTaskState",
+            "paramType" => "body",
+        }
     ]}) do
   cross_origin
   # the guts live here
@@ -425,19 +373,14 @@ HomeQuest.add_route('POST', '/v1/task/{task_uuid}', {
 end
 
 
-
 HomeQuest.add_route('GET', '/v1/reward', {
-  "resourcePath" => "/Default",
-  "summary" => "Get array of Reward",
-  "nickname" => "reward_get",
-  "responseClass" => "array[Reward]",
-  "endpoint" => "/reward",
-  "notes" => "",
-  "parameters" => [
-
-
-
-
+    "resourcePath" => "/Default",
+    "summary" => "Get array of Reward",
+    "nickname" => "reward_get",
+    "responseClass" => "array[Reward]",
+    "endpoint" => "/reward",
+    "notes" => "",
+    "parameters" => [
     ]}) do
   cross_origin
   # the guts live here
@@ -451,24 +394,19 @@ end
 
 
 HomeQuest.add_route('POST', '/v1/reward', {
-  "resourcePath" => "/Default",
-  "summary" => "Create reward",
-  "nickname" => "reward_post",
-  "responseClass" => "Reward",
-  "endpoint" => "/reward",
-  "notes" => "",
-  "parameters" => [
-
-
-
-
-    {
-      "name" => "body",
-      "description" => "",
-      "dataType" => "NewReward",
-      "paramType" => "body",
-    }
-
+    "resourcePath" => "/Default",
+    "summary" => "Create reward",
+    "nickname" => "reward_post",
+    "responseClass" => "Reward",
+    "endpoint" => "/reward",
+    "notes" => "",
+    "parameters" => [
+        {
+            "name" => "body",
+            "description" => "",
+            "dataType" => "NewReward",
+            "paramType" => "body",
+        }
     ]}) do
   cross_origin
   # the guts live here
@@ -481,30 +419,25 @@ end
 
 
 HomeQuest.add_route('GET', '/v1/reward/{reward_uuid}', {
-  "resourcePath" => "/Default",
-  "summary" => "Earn Reward",
-  "nickname" => "reward_reward_uuid_get",
-  "responseClass" => "void",
-  "endpoint" => "/reward/{reward_uuid}",
-  "notes" => "",
-  "parameters" => [
-
-
-    {
-      "name" => "reward_uuid",
-      "description" => "UUID of Reward",
-      "dataType" => "string",
-      "paramType" => "path",
-    },
-
-
-
+    "resourcePath" => "/Default",
+    "summary" => "Earn Reward",
+    "nickname" => "reward_reward_uuid_get",
+    "responseClass" => "void",
+    "endpoint" => "/reward/{reward_uuid}",
+    "notes" => "",
+    "parameters" => [
+        {
+            "name" => "reward_uuid",
+            "description" => "UUID of Reward",
+            "dataType" => "string",
+            "paramType" => "path",
+        },
     ]}) do
   cross_origin
   # the guts live here
   user_uuid = @@homequest_tokens[request.env['HTTP_HOMEQUEST_TOKEN']]
   unless @user = search_for_child(settings.db[:parents].find, :uuid, user_uuid) then
-    return { message: "ユーザーは見つかりませんでした。" }.to_json
+    return {message: "ユーザーは見つかりませんでした。"}.to_json
   end
   settings.db[:reward].find(:uuid => params[:uuid]).each do |doc|
     @reward = doc
