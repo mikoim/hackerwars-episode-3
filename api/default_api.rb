@@ -182,15 +182,20 @@ HomeQuest.add_route('POST', '/v1/signup', {
         }
     ]}) do
   cross_origin
-  # the guts live here
+  # ToDo: implement validation
 
-  @parent = JSON.parse request.body.read
-  @parent.store(:children, Array.new)
-  @parent.store(:uuid, SecureRandom.uuid)
-  @parent.store(:is_admin, true)
-  settings.db[:parent].insert_one(@parent)
+  parent = JSON.parse request.body.read
+  parent.store(:children, Array.new)
+  parent.store(:uuid, SecureRandom.uuid)
+  parent.store(:is_admin, true)
 
-  #nilで良い
+  begin
+    settings.db[:parent].insert_one(parent)
+  rescue Mongo::Error::OperationFailure
+    status 500
+    return json :message => 'データベースでエラーが発生しました．'
+  end
+
   return nil
 end
 
