@@ -19,6 +19,7 @@ function HomeQuest_API(token) {
     if (token) {
         api.apiClient.authentications.api_key.apiKey = token;
     }
+    api.apiClient.basePath = location.origin + '/v1';
     return api;
 }
 
