@@ -26,18 +26,32 @@ HomeQuest.add_route('DELETE', '/v1/child/{child_uuid}', {
         },
     ]}) do
   cross_origin
-  # the guts live here
-  user_uuid = @@homequest_tokens[request.env['HTTP_HOMEQUEST_TOKEN']] if @@homequest_tokens[headers['homequest_token']]
 
-  if user_uuid["is_admin"]
-    settings.db[:parent].find(prams[:child_uuid]).limit(1).each do |mortal_child|
-      mortal.child.delete_one
-      return nil
-    end
-  else
+  user_uuid = @homequest_tokens[request.env['HTTP_HOMEQUEST_TOKEN']]
+  child_uuid = params['child_uuid']
+
+  if user_uuid.nil?
     status 401
-    return message '管理者権限が必要です'
+    return message '子ユーザーを削除するにはログインする必要があります'
   end
+
+  parent = search_parent('uuid', user_uuid)
+
+  if parent.nil?
+    status 403
+    return message '子ユーザーを削除するには親ユーザーでログインする必要があります'
+  end
+
+  if search_child('uuid', child_uuid).nil?
+    status 404
+    return message '子ユーザーは見つかりませんでした'
+  end
+
+  parent['children'].delete_if {|c| c['uuid'] == child_uuid}
+
+  settings.db['parent'].find({uuid: parent['uuid']}).update_one(parent)
+
+  return nil
 end
 
 HomeQuest.add_route('GET', '/v1/child', {
