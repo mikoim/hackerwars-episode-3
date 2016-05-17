@@ -65,7 +65,7 @@
                             <ul>
                                 <!-- <li>完了クエスト数：　5</li> -->
                                 <li>現在のポイント： {{ status.point }} pt</li>
-                                <li>{{ message }}</li>
+                                <li v-if="message">{{ message }}</li>
                             </ul>
                         </div>
                     </div>
@@ -75,7 +75,7 @@
                         <p class="lead">{{ t.application_deadline | epoch2str }} まで受注可能</p>
                         <div class="panel panel-info">
                             <div class="panel-heading">
-                                {{ t.completion_deadline | epoch2str }} / むずかしさ： {{ t.difficulty | int2star }} / 報酬：なし
+                                {{ t.completion_deadline | epoch2str }} / むずかしさ： {{ t.difficulty | int2star }} / 報酬： {{ t.point }} pt
                             </div>
                             <div class="panel-body">
                                 <p class="quest-title text-center">

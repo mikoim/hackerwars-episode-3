@@ -19,6 +19,7 @@ function HomeQuest_API(token) {
     if (token) {
         api.apiClient.authentications.api_key.apiKey = token;
     }
+    api.apiClient.basePath = location.origin + '/v1';
     return api;
 }
 
@@ -48,16 +49,7 @@ function int2star(level) {
 }
 
 function epoch2str(unix) {
-    var milliseconds = unix * 1000;
-    var date = new Date(milliseconds);
-    var day_of_the_week = ['月', '火', '水', '木', '金', '土', '日'];
-    var month = ("0" + (date.getMonth() + 1)).slice(-2);
-    var day = ("0" + date.getDate()).slice(-2);
-    var hour = ("0" + date.getHours()).slice(-2);
-    var minute = ("0" + date.getMinutes()).slice(-2);
-    var second = ("0" + date.getSeconds()).slice(-2);
-    var week_day = day_of_the_week[date.getDay()];
-    return month + "月" + day + "日（" + week_day + "） " + hour + "時" + minute + "分" + second + "秒";
+    return DateFormat(new Date(unix), 'yyyy年mm月dd日 HH時MM分ss秒');
 }
 
 function str2epoch(str) {

@@ -16,6 +16,7 @@
   },
   "devDependencies": {
     "bower": "^1.7.1",
+    "dateformat": "^1.0.12",
     "del": "^2.2.0",
     "expect.js": "~0.3.1",
     "gulp": "^3.9.0",
