@@ -27,7 +27,7 @@ class HomeQuest < Swaggering
 
   helpers do
     def search_children(key, value)
-      parents = settings.db['parent'].find({"children.#{key}" => value}).to_a
+      parents = settings.db['parent'].find({"children.#{key}" => value}).projection({_id: 0}).to_a
 
       if parents.empty?
         return []
@@ -46,7 +46,7 @@ class HomeQuest < Swaggering
     end
 
     def search_parents(key, value)
-      return settings.db['parent'].find({key => value}).to_a
+      return settings.db['parent'].find({key => value}).projection({_id: 0}).to_a
     end
 
     def search_parent(key, value)
