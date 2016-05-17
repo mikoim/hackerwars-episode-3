@@ -2,16 +2,16 @@
 swagger: "2.0"
 info:
   description: "ToDo App for Kids"
-  version: "0.0.2"
+  version: "0.0.3"
   title: "Home Quest"
   license:
     name: "MIT"
 basePath: "/v1"
 schemes:
 - "http"
-produces:
-- "application/json"
 consumes:
+- "application/json"
+produces:
 - "application/json"
 paths:
   /child:
@@ -367,13 +367,19 @@ definitions:
     required:
     - "accepted_child"
     - "application_deadline"
+    - "completed_child"
     - "completion_deadline"
     - "description"
     - "difficulty"
-    - "is_accept"
+    - "is_accepted"
+    - "is_canceled"
+    - "is_completed"
+    - "is_rejected"
+    - "is_verified"
     - "point"
     - "title"
     - "uuid"
+    - "verified_child"
     properties:
       uuid:
         type: "string"
@@ -396,27 +402,49 @@ definitions:
       description:
         type: "string"
         description: "Description"
-      is_accept:
+      is_accepted:
         type: "boolean"
         description: "Is quest accepted?"
+      is_canceled:
+        type: "boolean"
+        description: "Is quest canceled?"
+      is_completed:
+        type: "boolean"
+        description: "Is quest completed?"
+      is_rejected:
+        type: "boolean"
+        description: "Is quest rejected?"
+      is_verified:
+        type: "boolean"
+        description: "Is quest verified?"
       accepted_child:
         type: "array"
-        description: "Array of Child"
+        description: "Array of Child UUID"
         items:
-          $ref: "#/definitions/Child"
+          type: "string"
+      completed_child:
+        type: "array"
+        description: "Array of Child UUID"
+        items:
+          type: "string"
+      verified_child:
+        type: "array"
+        description: "Array of Child UUID"
+        items:
+          type: "string"
   updateTaskState:
     type: "object"
     properties:
-      is_accept:
+      is_accepted:
         type: "boolean"
         description: "Is quest accepted?"
-      is_cancel:
+      is_canceled:
         type: "boolean"
-        description: "Is quest cancelled?"
-      is_complete:
+        description: "Is quest canceled?"
+      is_completed:
         type: "boolean"
         description: "Is quest completed?"
-      is_reject:
+      is_rejected:
         type: "boolean"
         description: "Is quest rejected?"
       is_verified:

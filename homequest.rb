@@ -12,7 +12,7 @@ class HomeQuest < Swaggering
   end
 
   self.configure do |config|
-    config.api_version = '0.0.2'
+    config.api_version = '0.0.3'
   end
 
   configure do
