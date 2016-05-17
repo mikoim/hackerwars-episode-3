@@ -330,15 +330,41 @@ HomeQuest.add_route('POST', '/v1/task', {
         }
     ]}) do
   cross_origin
-  # the guts live here
-  @task = JSON.parse request.body.read
-  @task.store(:uuid, SecureRandom.uuid)
-  settings.db[:task].insert_one(@task)
-  @task.to_json
+  # ToDo: implement validation
 
+  user_uuid = @homequest_tokens[request.env['HTTP_HOMEQUEST_TOKEN']]
+
+  if user_uuid.nil?
+    status 401
+    return message 'タスクを作成するにはログインする必要があります'
+  end
+
+  parent = search_parent('uuid', user_uuid)
+
+  if parent.nil?
+    status 403
+    return message 'タスクを作成するには親ユーザーでログインする必要があります'
+  end
+
+  task = JSON.parse request.body.read
+  task['uuid'] = SecureRandom.uuid
+  task['parent_uuid'] = parent['uuid']
+  task['accepted_child'] = []
+  task['completed_child'] = []
+  task['verified_child'] = []
+
+  settings.db['task'].insert_one(task)
+
+  # append dummy response
+  task['is_accepted'] = false
+  task['is_canceled'] = false
+  task['is_completed'] = false
+  task['is_rejected'] = false
+  task['is_verified'] = false
+
+  return json task
 end
 
-# Return nothing
 HomeQuest.add_route('DELETE', '/v1/task/{task_uuid}', {
     "resourcePath" => "/Default",
     "summary" => "Delete Task",
