@@ -50,12 +50,22 @@ HomeQuest.add_route('GET', '/v1/child', {
     "parameters" => [
     ]}) do
   cross_origin
-  # the guts live here
-  parent_uuid = @@homequest_tokens[request.env['HTTP_HOMEQUEST_TOKEN']]
-  settings.db[:parent].find(:uuid => parent_uuid).limit(1).each do |doc|
-    @parent = doc
+
+  user_uuid = @homequest_tokens[request.env['HTTP_HOMEQUEST_TOKEN']]
+
+  if user_uuid.nil?
+    status 401
+    return message '子ユーザーを取得するにはログインする必要があります'
   end
-  json @parent[:children]
+
+  parent = search_parent('uuid', user_uuid)
+
+  if parent.nil?
+    status 403
+    return message '子ユーザーを取得するには親ユーザーでログインする必要があります'
+  end
+
+  return json parent['children']
 end
 
 HomeQuest.add_route('POST', '/v1/child', {
