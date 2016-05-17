@@ -137,7 +137,7 @@ HomeQuest.add_route('GET', '/v1/notification', 'resourcePath' => '/Default',
                                                ]) do
   cross_origin
 
-  user_uuid = @homequest_tokens[headers['homequest_token']]
+  user_uuid = @homequest_tokens[request.env['HTTP_HOMEQUEST_TOKEN']]
 
   if user_uuid.nil?
     status 401
