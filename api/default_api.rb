@@ -426,13 +426,50 @@ HomeQuest.add_route('GET', '/v1/task/{task_uuid}', 'resourcePath' => '/Default',
                                                      }
                                                    ]) do
   cross_origin
-  # the guts live here
 
-  settings.db[:task].find(uuid: params[:task_uuid]).each do |tmp|
-    @task = tmp
+  user_uuid = @homequest_tokens[request.env['HTTP_HOMEQUEST_TOKEN']]
+  task_uuid = params['task_uuid']
+
+  if user_uuid.nil?
+    status 401
+    return message 'タスクを取得するにはログインする必要があります'
   end
 
-  @task.to_json
+  parent = search_parent('uuid', user_uuid)
+
+  tasks = settings.db['task'].find(parent_uuid: parent['uuid'], uuid: task_uuid).projection(_id: 0).to_a
+  tasks.map! do |task|
+    if task['verified_child'].include?(user_uuid)
+      task['is_accepted'] = true
+      task['is_completed'] = true
+      task['is_verified'] = true
+    elsif task['completed_child'].include?(user_uuid)
+      task['is_accepted'] = true
+      task['is_completed'] = true
+      task['is_verified'] = false
+    elsif task['accepted_child'].include?(user_uuid)
+      task['is_accepted'] = true
+      task['is_completed'] = false
+      task['is_verified'] = false
+    else
+      task['is_accepted'] = false
+      task['is_completed'] = false
+      task['is_verified'] = false
+    end
+
+    next task
+  end
+
+  case tasks.count
+  when 0
+    status 404
+    return message 'タスクは見つかりませんでした'
+  when 1
+    return json tasks.first
+  else
+    status 500
+    return message '同じUUIDを持つ複数のタスクが見つかりました'
+  end
 end
 
 HomeQuest.add_route('POST', '/v1/task/{task_uuid}', 'resourcePath' => '/Default',
