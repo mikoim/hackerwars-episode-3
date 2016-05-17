@@ -74,30 +74,36 @@ HomeQuest.add_route('POST', '/v1/child', {
         }
     ]}) do
   cross_origin
-  # the guts live here
-  parent_uuid = @@homequest_tokens[request.env['HTTP_HOMEQUEST_TOKEN']]
+  # ToDo: implement validation
+
+  user_uuid = @homequest_tokens[request.env['HTTP_HOMEQUEST_TOKEN']]
+
+  if user_uuid.nil?
+    status 401
+    return message '子ユーザーを作成するにはログインする必要があります'
+  end
+
+  parent = search_parent('uuid', user_uuid)
+
+  if parent.nil?
+    status 403
+    return message '子供のユーザーを作成するには親ユーザーでログインする必要があります'
+  end
+
   uuid = SecureRandom.uuid
-  settings.db[:parent].find(:uuid => parent_uuid).each do |doc|
-    @family_name = doc[:family_name] if parent_uuid
-  end
+  child = {given_name: JSON.parse(request.body.read)["given_name"],
+           parent_uuid: parent['uuid'],
+           uuid: uuid,
+           family_name: parent['family_name'],
+           is_admin: false,
+           login_token: SecureRandom.hex,
+           point: 0}
 
+  parent['children'].push(child)
 
-  @child = {given_name: JSON.parse(request.body.read)["given_name"],
-            parent_uuid: parent_uuid,
-            uuid: uuid,
-            family_name: @family_name,
-            is_admin: false
-  }
-  @child.store(:login_token, SecureRandom.hex)
-  #store @child in datebase
-  matches = settings.db[:parent].find(:uuid => parent_uuid)
-  matches.limit(1).each do |doc|
-    @parent = doc
-    doc[:children] << @child
-  end
-  matches.find_one_and_replace(@parent)
-  @child.delete(:parent_uuid)
-  @child.to_json
+  settings.db['parent'].find({uuid: parent['uuid']}).update_one(parent)
+
+  return json child
 end
 
 HomeQuest.add_route('GET', '/v1/notification', {
