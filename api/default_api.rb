@@ -381,9 +381,35 @@ HomeQuest.add_route('DELETE', '/v1/task/{task_uuid}', {
         },
     ]}) do
   cross_origin
-  # the guts live here
-  settings.db[:task].find(:uuid => params[:task_uuid]).delete_one
-  return nil
+
+  task_uuid = params['task_uuid']
+  user_uuid = @homequest_tokens[request.env['HTTP_HOMEQUEST_TOKEN']]
+
+  if user_uuid.nil?
+    status 401
+    return message 'タクスを削除するにはログインする必要があります'
+  end
+
+  parent = search_parent('uuid', user_uuid)
+
+  if parent.nil?
+    status 403
+    return message 'タスクを削除するには親ユーザーでログインする必要があります'
+  end
+
+  tasks = settings.db['task'].find({uuid: task_uuid, parent_uuid: user_uuid})
+
+  case tasks.count
+    when 0
+      status 404
+      return message 'タスクは見つかりませんでした'
+    when 1
+      tasks.delete_one
+      return nil
+    else
+      status 500
+      return message '同じUUIDを持つ複数のタスクが見つかりました'
+  end
 end
 
 HomeQuest.add_route('GET', '/v1/task/{task_uuid}', {
