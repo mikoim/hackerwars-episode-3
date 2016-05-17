@@ -290,30 +290,43 @@ HomeQuest.add_route('GET', '/v1/task', {
     "parameters" => [
     ]}) do
   cross_origin
-  # the guts live here
 
-  @task = []
-  uuid = @@homequest_tokens[request.env['HTTP_HOMEQUEST_TOKEN']]
-  settings.db[:parent].find(:uuid => uuid).limit(1).each do |otona|
-    settings.db[:task].find(:owner => uuid).each do |quest|
-      @task << quest
-    end
+  user_uuid = @homequest_tokens[request.env['HTTP_HOMEQUEST_TOKEN']]
 
-    #kodononara
-    if otona.count == 0 then
-      @child = search_for_child(settings.db[:parent].find, :uuid, uuid)
-      @child[:task].each do |quest|
-        @task << quest
-      end
-    end
-
+  if user_uuid.nil?
+    status 401
+    return message 'タスクを取得するにはログインする必要があります'
   end
 
-  #TODO: return is_accept based on users
-  return @task.to_json
+  parent = search_parent('uuid', user_uuid)
+
+  tasks = settings.db['task'].find({parent_uuid: parent['uuid']}).projection({_id: 0}).to_a
+  tasks.map! do |task|
+    case
+      when task['verified_child'].include?(user_uuid)
+        task['is_accepted'] = true
+        task['is_completed'] = true
+        task['is_verified'] = true
+      when task['completed_child'].include?(user_uuid)
+        task['is_accepted'] = true
+        task['is_completed'] = true
+        task['is_verified'] = false
+      when task['accepted_child'].include?(user_uuid)
+        task['is_accepted'] = true
+        task['is_completed'] = false
+        task['is_verified'] = false
+      else
+        task['is_accepted'] = false
+        task['is_completed'] = false
+        task['is_verified'] = false
+    end
+
+    next task
+  end
+
+  return json tasks
 end
 
-# データベースに入れたうえで, 格納した時と同じ挙動
 HomeQuest.add_route('POST', '/v1/task', {
     "resourcePath" => "/Default",
     "summary" => "Create Task",
