@@ -1,0 +1,11 @@
+AllCops:
+  TargetRubyVersion: 2.3
+  Exclude:
+    - 'bower_components/**/*'
+    - 'node_modules/**/*'
+    - 'public/**/*'
+    - 'src/**/*'
+    - 'swagger-js/**/*'
+    - 'swagger-ui/**/*'
+    - 'vendor/**/*'
+    - 'lib/swaggering.rb'

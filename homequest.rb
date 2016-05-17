@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require './lib/swaggering'
 require 'mongo'
 require 'sinatra/contrib'
@@ -11,7 +12,7 @@ class HomeQuest < Swaggering
     @homequest_tokens = {}
   end
 
-  self.configure do |config|
+  configure do |config|
     config.api_version = '0.0.3'
   end
 
@@ -21,56 +22,47 @@ class HomeQuest < Swaggering
     use BetterErrors::Middleware
     BetterErrors.application_root = settings.root
 
-    set :db, Mongo::Client.new(['localhost:27017'], :database => 'homequest')
-    settings.db['parent'].indexes.create_one({:email => 1}, :unique => true)
+    set :db, Mongo::Client.new(['localhost:27017'], database: 'homequest')
+    settings.db['parent'].indexes.create_one({ email: 1 }, unique: true)
   end
 
   helpers do
     def search_children(key, value)
-      parents = settings.db['parent'].find({"children.#{key}" => value}).projection({_id: 0}).to_a
+      parents = settings.db['parent'].find("children.#{key}" => value).projection(_id: 0).to_a
 
-      if parents.empty?
-        return []
-      end
-        return parents.map {|p| p['children']}.flatten.select {|v| v[key] == value}
+      return [] if parents.empty?
+      parents.map { |p| p['children'] }.flatten.select { |v| v[key] == value }
     end
 
     def search_child(key, value)
       children = search_children(key, value)
 
-      if children.length > 1
-        raise 'something went wrong'
-      end
+      raise 'something went wrong' if children.length > 1
 
-      return children.first
+      children.first
     end
 
     def search_parents(key, value)
-      return settings.db['parent'].find({key => value}).projection({_id: 0}).to_a
+      settings.db['parent'].find(key => value).projection(_id: 0).to_a
     end
 
     def search_parent(key, value)
       parents = search_parents(key, value)
 
-      if parents.length > 1
-        raise 'something went wrong'
-      end
+      raise 'something went wrong' if parents.length > 1
 
-      return parents.first
+      parents.first
     end
 
     def message(text)
-      json :message => text
+      json message: text
     end
-
   end
 
   set :public_folder, File.dirname(__FILE__) + '/public'
 
   get '/swagger-ui/*' do |path|
-    if path.empty?
-      path = 'index.html'
-    end
+    path = 'index.html' if path.empty?
 
     send_file(File.join('swagger-ui/dist/', path))
   end
@@ -82,6 +74,6 @@ class HomeQuest < Swaggering
 end
 
 # include the api files
-Dir["./api/*.rb"].each { |file|
+Dir['./api/*.rb'].each do |file|
   require file
-}
+end
