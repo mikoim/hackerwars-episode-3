@@ -54,6 +54,26 @@ class HomeQuest < Swaggering
       parents.first
     end
 
+    def inject_task_state(task, user_uuid)
+      if task['verified_child'].include?(user_uuid)
+        task['is_accepted'] = true
+        task['is_completed'] = true
+        task['is_verified'] = true
+      elsif task['completed_child'].include?(user_uuid)
+        task['is_accepted'] = true
+        task['is_completed'] = true
+        task['is_verified'] = false
+      elsif task['accepted_child'].include?(user_uuid)
+        task['is_accepted'] = true
+        task['is_completed'] = false
+        task['is_verified'] = false
+      else
+        task['is_accepted'] = false
+        task['is_completed'] = false
+        task['is_verified'] = false
+      end
+    end
+
     def message(text)
       json message: text
     end

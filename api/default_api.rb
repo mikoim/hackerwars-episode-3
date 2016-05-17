@@ -291,24 +291,7 @@ HomeQuest.add_route('GET', '/v1/task', 'resourcePath' => '/Default',
 
   tasks = settings.db['task'].find(parent_uuid: parent['uuid']).projection(_id: 0).to_a
   tasks.map! do |task|
-    if task['verified_child'].include?(user_uuid)
-      task['is_accepted'] = true
-      task['is_completed'] = true
-      task['is_verified'] = true
-    elsif task['completed_child'].include?(user_uuid)
-      task['is_accepted'] = true
-      task['is_completed'] = true
-      task['is_verified'] = false
-    elsif task['accepted_child'].include?(user_uuid)
-      task['is_accepted'] = true
-      task['is_completed'] = false
-      task['is_verified'] = false
-    else
-      task['is_accepted'] = false
-      task['is_completed'] = false
-      task['is_verified'] = false
-    end
-
+    inject_task_state task, user_uuid
     next task
   end
 
@@ -439,24 +422,7 @@ HomeQuest.add_route('GET', '/v1/task/{task_uuid}', 'resourcePath' => '/Default',
 
   tasks = settings.db['task'].find(parent_uuid: parent['uuid'], uuid: task_uuid).projection(_id: 0).to_a
   tasks.map! do |task|
-    if task['verified_child'].include?(user_uuid)
-      task['is_accepted'] = true
-      task['is_completed'] = true
-      task['is_verified'] = true
-    elsif task['completed_child'].include?(user_uuid)
-      task['is_accepted'] = true
-      task['is_completed'] = true
-      task['is_verified'] = false
-    elsif task['accepted_child'].include?(user_uuid)
-      task['is_accepted'] = true
-      task['is_completed'] = false
-      task['is_verified'] = false
-    else
-      task['is_accepted'] = false
-      task['is_completed'] = false
-      task['is_verified'] = false
-    end
-
+    inject_task_state task, user_uuid
     next task
   end
 
