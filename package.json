@@ -12,7 +12,7 @@
   "author": "DIT (dit.rohm@gmail.com)",
   "license": "MIT",
   "dependencies": {
-    "superagent": "1.7.1"
+    "superagent": "6.1.0"
   },
   "devDependencies": {
     "bower": "^1.7.1",
