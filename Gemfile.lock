@@ -25,7 +25,7 @@ GEM
       sass (>= 3.2, < 3.5)
     debug_inspector (0.0.2)
     erubis (2.7.0)
-    ffi (1.9.10)
+    ffi (1.13.1)
     mongo (2.2.5)
       bson (~> 4.0)
     multi_json (1.12.0)
